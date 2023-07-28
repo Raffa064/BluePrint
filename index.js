@@ -8,11 +8,6 @@ const searchContainer = document.querySelector('#bp-search-container')
 const searchInput = document.querySelector('#search-input')
 const nextButton = document.querySelector('#search-next-button')
 
-const canvasViewport = {
-    width: canvas.getBoundingClientRect().width,
-    height: canvas.getBoundingClientRect().height
-}
-
 const state = {
     globalId: 0,
     blocks: []
@@ -25,7 +20,7 @@ const commandKeys = {
     f: false
 }
 
-var viewport = canvasViewport
+var viewport = {}
 var canvasQuality = window.devicePixelRatio
 var grid = 20
 var isDragging
@@ -103,10 +98,22 @@ function setupSaveLoadFeatures() {
     setInterval(save, 2000)
 }
 
-function setupCanvas(viewport, quality) {
-    canvas.width = viewport.width * quality
-    canvas.height = viewport.height * quality
-    ctx.scale(quality, quality)
+function setupCanvas() {
+    const canvasRect = canvas.getBoundingClientRect()
+    
+    viewport = {
+        width: canvasRect.width,
+        height: canvasRect.height
+    }
+    
+    canvas.width = viewport.width * canvasQuality
+    canvas.height = viewport.height * canvasQuality
+    ctx.scale(canvasQuality, canvasQuality)
+    
+    window.onresize = () => {
+        setupCanvas()
+        updateCanvas()
+    }
 }
 
 function searchBlocks() {
@@ -346,7 +353,7 @@ function renderInfo(fontSize) {
     const x = viewport.width / 2
     const y = 15
     const lineHeight = fontSize * 1.2
-    ctx.font = fontSize + 'px Arial'
+    ctx.font = fontSize + 'px Helvetica'
 
     ctx.fillStyle = '#aaa'
     ctx.textAlign = 'left'
