@@ -99,7 +99,7 @@ div#bp-search-container input:focus {
 }
 
 div#bp-search-container input.error {
-    border-bottom: 2px solid red;
+    border-bottom: 1px solid red;
 }
 
 div#bp-search-container button {

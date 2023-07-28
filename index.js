@@ -184,6 +184,13 @@ function unselect() {
     selectedBlock = null
 }
 
+function translateTo(x, y) {
+    transform.x = x
+    transform.y = y
+    rootTheme.style.setProperty('--translate-x', transform.x + 'px')
+    rootTheme.style.setProperty('--translate-y', transform.y + 'px')
+}
+
 function onMouseDown(event) {
     if (event.ctrlKey && !event.shiftKey) {
         event.preventDefault()
@@ -277,13 +284,6 @@ function onMouseDown(event) {
     }
 }
 
-function translateTo(x, y) {
-    transform.x = x
-    transform.y = y
-    rootTheme.style.setProperty('--translate-x', transform.x + 'px')
-    rootTheme.style.setProperty('--translate-y', transform.y + 'px')
-}
-
 function onMouseMove(event) {
     if (isDragging) {
         event.preventDefault()
@@ -317,6 +317,10 @@ function onMouseUp() {
 }
 
 function onKeyDown(event) {
+    if (event.key == 'f' && event.ctrlKey) {
+        event.preventDefault()
+    }
+    
     const lowerCaseKey = event.key.toLowerCase()
     if (commandKeys[lowerCaseKey] !== undefined) {
         commandKeys[lowerCaseKey] = true
@@ -328,6 +332,7 @@ function onKeyUp(event) {
     if (event.key == 'f' && event.ctrlKey) {
         searchContainer.classList.toggle('hidden')
         searchInput.focus()
+        event.preventDefault()
     }
 
     const lowerCaseKey = event.key.toLowerCase()
@@ -345,7 +350,7 @@ function renderInfo(fontSize) {
 
     ctx.fillStyle = '#aaa'
     ctx.textAlign = 'left'
-    ctx.fillText('[ ' + (-transform.x).toFixed(2) + ', ' + (transform.y).toFixed(2) + ' ]', lineHeight, lineHeight)
+    ctx.fillText('Center: [ ' + (-transform.x + viewport.width/2).toFixed(2) + ', ' + (transform.y + viewport.height/2).toFixed(2) + ' ]', lineHeight, lineHeight)
     ctx.textAlign = 'right'
     ctx.fillText('Blocks: ' + container.children.length, viewport.width - lineHeight, lineHeight)
 
