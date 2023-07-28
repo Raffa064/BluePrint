@@ -13,10 +13,21 @@ const canvasViewport = {
     height: canvas.getBoundingClientRect().height
 }
 
+const state = {
+    globalId: 0,
+    blocks: []
+}
+
+const commandKeys = {
+    shift: false,
+    control: false,
+    alt: false,
+    f: false
+}
+
 var viewport = canvasViewport
 var canvasQuality = window.devicePixelRatio
 var grid = 20
-
 var isDragging
 var isBlockDragging
 var dragOffset = { x: 0, y: 0 }
@@ -26,53 +37,21 @@ var selectedBlock;
 var searchResults = []
 var searchIndex = 0
 
-const state = {
-    globalId: 0,
-    blocks: []
-}
-
-const commandKeys = {
-    shift: false,
-    control: false,
-    alt: false
-}
-
-window.addEventListener('mousedown', onMouseDown)
-window.addEventListener('mousemove', onMouseMove)
-window.addEventListener('mouseup', onMouseUp)
-window.addEventListener('keydown', onKeyDown)
-window.addEventListener('keyup', onKeyUp)
-
-searchInput.oninput = () => {
-    searchResults = state.blocks.filter(block => block.innerHTML.includes(searchInput.value))
-    searchIndex = 0
-
-    nextButton.textContent = 'Next (0/' + searchResults.length + ')'
-}
-
-nextButton.onclick = () => {
-    if (searchResults.length <= 0) return
-
-    block = searchResults[searchIndex]
-    searchIndex = (searchIndex + 1) % searchResults.length
-    nextButton.textContent = 'Next (' + searchIndex + '/' + searchResults.length + ')'
-    if (block) {
-        const rect = getBlockRect(block)
-
-        translateTo(
-            transform.x - rect.x - rect.width / 2 + viewport.width / 2,
-            transform.y - rect.y - rect.height / 2 + viewport.height / 2
-        )
-
-        updateCanvas()
-    }
-}
-
-load()
-setInterval(save, 2000)
-
+setupInputEvents()
+setupSaveLoadFeatures()
 setupCanvas(viewport, canvasQuality)
 updateCanvas()
+
+function setupInputEvents() {
+    searchInput.oninput = searchBlocks
+    nextButton.onclick = goToNextBlock
+    
+    window.addEventListener('mousedown', onMouseDown)
+    window.addEventListener('mousemove', onMouseMove)
+    window.addEventListener('mouseup', onMouseUp)
+    window.addEventListener('keydown', onKeyDown)
+    window.addEventListener('keyup', onKeyUp)
+}
 
 function save() {
     const data = {
@@ -119,10 +98,46 @@ function load() {
     }
 }
 
+function setupSaveLoadFeatures() {
+    load()
+    setInterval(save, 2000)
+}
+
 function setupCanvas(viewport, quality) {
     canvas.width = viewport.width * quality
     canvas.height = viewport.height * quality
     ctx.scale(quality, quality)
+}
+
+function searchBlocks() {
+    searchResults = state.blocks.filter(block => block.innerHTML.includes(searchInput.value))
+    searchIndex = 0
+    nextButton.textContent = 'Next (0/' + searchResults.length + ')'
+
+    if (searchResults.length <= 0) {
+        searchInput.classList.add('error')
+        return
+    }
+
+    searchInput.classList.remove('error')
+}
+
+function goToNextBlock() {
+    if (searchResults.length <= 0) return
+
+    block = searchResults[searchIndex]
+    searchIndex = (searchIndex + 1) % searchResults.length
+    nextButton.textContent = 'Next (' + searchIndex + '/' + searchResults.length + ')'
+    if (block) {
+        const rect = getBlockRect(block)
+
+        translateTo(
+            transform.x - rect.x - rect.width / 2 + viewport.width / 2,
+            transform.y - rect.y - rect.height / 2 + viewport.height / 2
+        )
+
+        updateCanvas()
+    }
 }
 
 function snapToGrid(n) {
@@ -302,12 +317,6 @@ function onMouseUp() {
 }
 
 function onKeyDown(event) {
-    if (event.key == 'f' && event.ctrlKey) {
-        searchContainer.classList.toggle('hidden')
-        searchInput.focus()
-        return
-    }
-
     const lowerCaseKey = event.key.toLowerCase()
     if (commandKeys[lowerCaseKey] !== undefined) {
         commandKeys[lowerCaseKey] = true
@@ -316,6 +325,11 @@ function onKeyDown(event) {
 }
 
 function onKeyUp(event) {
+    if (event.key == 'f' && event.ctrlKey) {
+        searchContainer.classList.toggle('hidden')
+        searchInput.focus()
+    }
+
     const lowerCaseKey = event.key.toLowerCase()
     if (commandKeys[lowerCaseKey] !== undefined) {
         commandKeys[lowerCaseKey] = false
@@ -338,18 +352,18 @@ function renderInfo(fontSize) {
     var i = 0
     ctx.textAlign = 'center'
 
-    const drawKeyInfo = (label, _shift, _control, _alt) => {
-        const { shift, control, alt } = commandKeys
-        const enabled = shift == _shift && control == _control && alt == _alt
+    const drawKeyInfo = (label, _shift, _control, _alt, _f) => {
+        const { shift, control, alt, f } = commandKeys
+        const enabled = shift == _shift && control == _control && alt == _alt && _f == f
         ctx.fillStyle = enabled ? '#aaa' : '#777'
         ctx.fillText(label, x, y + (i++ * lineHeight))
     }
 
-    //                                   Shift  Ctrl   Alt
-    drawKeyInfo('Shift : Move', true, false, false)
-    drawKeyInfo('Shift + Ctrl : Delete', true, true, false)
-    drawKeyInfo('Ctrl : Create', false, true, false)
-    drawKeyInfo('Alt : Connect', false, false, true)
+    drawKeyInfo('Shift : Move', true, false, false, false)
+    drawKeyInfo('Ctrl : Create', false, true, false, false)
+    drawKeyInfo('Shift + Ctrl : Delete', true, true, false, false)
+    drawKeyInfo('Ctrl + f : Toggle Search', false, true, false, true)
+    drawKeyInfo('Alt : Connect', false, false, true, false)
 }
 
 function renderDot(x, y, radius, color) {
@@ -397,7 +411,7 @@ function renderConnection(from, to) {
 function updateCanvas() {
     ctx.fillStyle = '#222'
     ctx.fillRect(0, 0, viewport.width, viewport.height)
-    
+
     ctx.strokeStyle = '#333'
     ctx.lineWidth = 3
     ctx.rect(transform.x, transform.y, viewport.width, viewport.height)

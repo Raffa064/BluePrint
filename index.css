@@ -84,6 +84,7 @@ div#bp-search-container.hidden {
 }
 
 div#bp-search-container input {
+    width: 200px;
     padding: 10px;
     background: transparent;
     color: #aaa;
@@ -97,11 +98,15 @@ div#bp-search-container input:focus {
     border: 1px solid #aaa7;
 }
 
+div#bp-search-container input.error {
+    border-bottom: 2px solid red;
+}
+
 div#bp-search-container button {
     padding: 10px;
     margin-left: 10px;
     background: #aaa1;
-    color: #aaa;
+    color: #fff;
     border-radius: 4px;
     transition: .2s;
 }
