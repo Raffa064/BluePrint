@@ -7,6 +7,8 @@ var holdingBlock // before selection
 var targetBlock
 
 function onTouchDown(event) {
+    if (event.touches.length > 1) return
+    
     if (waitingForDoubleClick) {
         //Double click
         waitingForDoubleClick = false
@@ -30,6 +32,8 @@ function onTouchDown(event) {
 }
 
 function onTouchMove(event) {
+    if (event.touches.length > 1) return
+    
     clearTimeout(holdTimeoutId)
 
     if (!isDragging) {
@@ -79,6 +83,8 @@ function onTouchMove(event) {
 }
 
 function onTouchUp(event) {
+    if (event.changedTouches.length > 1) return
+    
     isDragging = false
     targetBlock = null
     updateCanvas()
