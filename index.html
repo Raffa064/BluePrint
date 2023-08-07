@@ -6,7 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
     <title>Blueprint</title>
     <link rel="stylesheet" href="index.css"/>
+    
     <script src="https://cdn.jsdelivr.net/npm/ismobilejs@1/dist/isMobile.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </head>
 
 <body>
@@ -15,8 +18,12 @@
     <div id="bp-container"></div>
     
     <div class="hidden" id="bp-search-container">
+        <span id='search-toggler'><ion-icon name="search-outline"></ion-icon></span>
         <input id="search-input" type="text" autocomplete="off" placeholder="Search"/> <button id="search-next-button">Next (0/0)</button>
     </div>
+    
+    <script src="desktop.js"></script>
+    <script src="mobile.js"></script>
     <script src="index.js"></script>
 </body>
 

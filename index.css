@@ -13,11 +13,8 @@
     outline: none;
 }
 
-html {
-    position: relative;
-}
-
 html, body {
+    position: relative;
     width: 100vw;
     height: 100vh;
     background: #222;
@@ -72,7 +69,7 @@ canvas {
 }
 
 div#bp-search-container {
-    position: absolute;
+    position: fixed;
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
@@ -83,8 +80,36 @@ div#bp-search-container {
     backdrop-filter: blur(5px);
 }
 
-div#bp-search-container.hidden {
+div#bp-search-container > * {
+    vertical-align: middle;
+}
+
+div#bp-search-container.hidden:not(.mobile) {
     display: none;
+}
+
+div#bp-search-container.mobile.hidden > * {
+    display: none;
+}
+
+div#bp-search-container #search-toggler {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.5rem;
+    color: #aaa;
+    transition: .2s;
+    border-radius: 4px;
+}
+
+div#bp-search-container #search-toggler:hover {
+    background: #aaa2;
+}
+
+div#bp-search-container:not(.hidden) #search-toggler {
+    margin-right: 6px;
 }
 
 div#bp-search-container input {
