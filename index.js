@@ -40,14 +40,14 @@ function toggleSearch() {
 function setupInputEvents() {
     searchInput.oninput = searchBlocks
     nextButton.onclick = goToNextBlock
-    
+
     if (isMobile.any) {
         searchContainer.classList.add('mobile')
         searchToggler.onclick = toggleSearch
         // TODO: implement mobile input 
-        return    
+        return
     }
-    
+
     window.addEventListener('mousedown', onMouseDown)
     window.addEventListener('mousemove', onMouseMove)
     window.addEventListener('mouseup', onMouseUp)
@@ -107,16 +107,16 @@ function setupSaveLoadFeatures() {
 
 function setupCanvas() {
     const canvasRect = canvas.getBoundingClientRect()
-    
+
     viewport = {
         width: canvasRect.width,
         height: canvasRect.height
     }
-    
+
     canvas.width = viewport.width * canvasQuality
     canvas.height = viewport.height * canvasQuality
     ctx.scale(canvasQuality, canvasQuality)
-    
+
     window.onresize = () => {
         setupCanvas()
         updateCanvas()
@@ -213,11 +213,11 @@ function renderHUD(fontSize) {
 
     ctx.fillStyle = '#aaa'
     ctx.textAlign = 'left'
-    ctx.fillText('[ ' + (-transform.x + viewport.width/2).toFixed(2) + ', ' + (transform.y + viewport.height/2).toFixed(2) + ' ]', lineHeight, lineHeight)
+    ctx.fillText('[ ' + (-transform.x + viewport.width / 2).toFixed(2) + ', ' + (transform.y + viewport.height / 2).toFixed(2) + ' ]', lineHeight, lineHeight)
     ctx.textAlign = 'right'
     ctx.fillText('Blocks: ' + container.children.length, viewport.width - lineHeight, lineHeight)
-    
-    if (!isMobile.any) {
+
+    if (isMobile.any) {
         renderMobileGestures(x, y, lineHeight)
     } else {
         renderDesktopKeys(x, y, lineHeight)
@@ -272,9 +272,10 @@ function updateCanvas() {
 
     ctx.strokeStyle = '#333'
     ctx.lineWidth = 3
-    ctx.rect(transform.x, transform.y, viewport.width, viewport.height)
+    ctx.rect(transform.x, transform.y, viewport.width-1.5, viewport.height-1.5)
     ctx.stroke()
 
+    var dots = 0
     const displacement = (x) => x / grid - floor(x / grid)
     for (let x = displacement(transform.x); x < viewport.width / grid; x++) {
         for (let y = displacement(transform.y); y < viewport.height / grid; y++) {
@@ -282,12 +283,13 @@ function updateCanvas() {
         }
     }
 
+    const fontSize = 15
+    renderHUD(fontSize)
+
     for (const from of state.blocks) {
         for (const to of from.connections) {
             renderConnection(from, to)
         }
     }
-    
-     const fontSize = 15
-     renderHUD(fontSize)
+
 }
