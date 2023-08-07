@@ -205,25 +205,6 @@ function translateTo(x, y) {
     rootTheme.style.setProperty('--translate-y', transform.y + 'px')
 }
 
-function renderHUD(fontSize) {
-    const x = viewport.width / 2
-    const y = 15
-    const lineHeight = fontSize * 1.2
-    ctx.font = fontSize + 'px Helvetica'
-
-    ctx.fillStyle = '#aaa'
-    ctx.textAlign = 'left'
-    ctx.fillText('[ ' + (-transform.x + viewport.width / 2).toFixed(2) + ', ' + (transform.y + viewport.height / 2).toFixed(2) + ' ]', lineHeight, lineHeight)
-    ctx.textAlign = 'right'
-    ctx.fillText('Blocks: ' + container.children.length, viewport.width - lineHeight, lineHeight)
-
-    if (isMobile.any) {
-        renderMobileGestures(x, y, lineHeight)
-    } else {
-        renderDesktopKeys(x, y, lineHeight)
-    }
-}
-
 function renderDot(x, y, radius, color) {
     ctx.beginPath()
     ctx.arc(x, y, radius, 0, 2 * PI)
@@ -266,6 +247,11 @@ function renderConnection(from, to) {
     renderDot(transform.x + toX, transform.y + toY, 5, '#f80')
 }
 
+function renderBackground() {
+    ctx.fillStyle = '#222'
+    ctx.fillRect(0, 0, viewport.width, viewport.height)
+}
+
 function renderGuide() {
     ctx.strokeStyle = '#333'
     ctx.lineWidth = 3
@@ -280,12 +266,28 @@ function renderGuide() {
     }
 }
 
+function renderHUD(fontSize) {
+    const x = viewport.width / 2
+    const y = 15
+    const lineHeight = fontSize * 1.2
+    ctx.font = fontSize + 'px Helvetica'
+
+    ctx.fillStyle = '#aaa'
+    ctx.textAlign = 'left'
+    ctx.fillText('[ ' + (-transform.x + viewport.width / 2).toFixed(2) + ', ' + (transform.y + viewport.height / 2).toFixed(2) + ' ]', lineHeight, lineHeight)
+    ctx.textAlign = 'right'
+    ctx.fillText('Blocks: ' + container.children.length, viewport.width - lineHeight, lineHeight)
+
+    if (isMobile.any) {
+        renderMobileGestures(x, y, lineHeight)
+    } else {
+        renderDesktopKeys(x, y, lineHeight)
+    }
+}
+
 function updateCanvas() {
-    ctx.fillStyle = '#222'
-    ctx.fillRect(0, 0, viewport.width, viewport.height)
-
+    renderBackground()
     renderGuide()
-
     renderHUD(15)
 
     for (const from of state.blocks) {
