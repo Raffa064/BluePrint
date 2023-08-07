@@ -68,6 +68,10 @@ canvas {
     outline: 2px solid red;
 }
 
+.block.selected * {
+    pointer-events: none;
+}
+
 div#bp-search-container {
     position: fixed;
     bottom: 10px;

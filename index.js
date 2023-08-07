@@ -44,7 +44,10 @@ function setupInputEvents() {
     if (isMobile.any) {
         searchContainer.classList.add('mobile')
         searchToggler.onclick = toggleSearch
-        // TODO: implement mobile input 
+
+        window.addEventListener('touchstart', onTouchDown)
+        window.addEventListener('touchmove', onTouchMove)
+        window.addEventListener('touchend', onTouchUp)
         return
     }
 
@@ -102,7 +105,9 @@ function load() {
 
 function setupSaveLoadFeatures() {
     load()
-    setInterval(save, 2000)
+    setInterval(() => {
+        save()
+    }, 2000)
 }
 
 function setupCanvas() {
@@ -172,6 +177,15 @@ function createBlock(x = 0, y = 0, id) {
     state.blocks.push(block)
 
     return block
+}
+
+function deleteBlock(block) {
+    event.preventDefault()
+    container.removeChild(block)
+    state.blocks.splice(state.blocks.indexOf(block), 1)
+    state.blocks.forEach(_block => {
+        _block.connections = _block.connections.filter((b) => b !== block)
+    })
 }
 
 function getBlockRect(block) {
@@ -257,7 +271,7 @@ function renderGuide() {
     ctx.lineWidth = 3
     ctx.rect(transform.x, transform.y, viewport.width - 1.5, viewport.height - 1.5)
     ctx.stroke()
-    
+
     const displacement = (x) => x / grid - floor(x / grid)
     for (let x = displacement(transform.x); x < viewport.width / grid; x++) {
         for (let y = displacement(transform.y); y < viewport.height / grid; y++) {
@@ -267,8 +281,6 @@ function renderGuide() {
 }
 
 function renderHUD(fontSize) {
-    const x = viewport.width / 2
-    const y = 15
     const lineHeight = fontSize * 1.2
     ctx.font = fontSize + 'px Helvetica'
 
@@ -277,6 +289,9 @@ function renderHUD(fontSize) {
     ctx.fillText('[ ' + (-transform.x + viewport.width / 2).toFixed(2) + ', ' + (transform.y + viewport.height / 2).toFixed(2) + ' ]', lineHeight, lineHeight)
     ctx.textAlign = 'right'
     ctx.fillText('Blocks: ' + container.children.length, viewport.width - lineHeight, lineHeight)
+
+    const x = viewport.width / 2
+    const y = lineHeight
 
     if (isMobile.any) {
         renderMobileGestures(x, y, lineHeight)
@@ -288,7 +303,7 @@ function renderHUD(fontSize) {
 function updateCanvas() {
     renderBackground()
     renderGuide()
-    renderHUD(15)
+    renderHUD(isMobile? 13 : 15)
 
     for (const from of state.blocks) {
         for (const to of from.connections) {

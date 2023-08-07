@@ -17,12 +17,7 @@ function onMouseDown(event) {
 
     if (commandKeys.control && commandKeys.shift) {
         if (clickedBlock) {
-            event.preventDefault()
-            container.removeChild(clickedBlock)
-            state.blocks.splice(state.blocks.indexOf(clickedBlock), 1)
-            state.blocks.forEach(_block => {
-                _block.connections = _block.connections.filter((b) => b !== clickedBlock)
-            })
+            deleteBlock(clickedBlock)
 
             updateCanvas()
         }
