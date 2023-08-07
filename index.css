@@ -116,6 +116,10 @@ div#bp-search-container:not(.hidden) #search-toggler {
     margin-right: 6px;
 }
 
+div#bp-search-container:not(.mobile) #search-toggler {
+    display: none;
+}
+
 div#bp-search-container input {
     width: 200px;
     padding: 10px;
