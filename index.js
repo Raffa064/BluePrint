@@ -213,7 +213,7 @@ function renderHUD(fontSize) {
 
     ctx.fillStyle = '#aaa'
     ctx.textAlign = 'left'
-    ctx.fillText('Center: [ ' + (-transform.x + viewport.width/2).toFixed(2) + ', ' + (transform.y + viewport.height/2).toFixed(2) + ' ]', lineHeight, lineHeight)
+    ctx.fillText('[ ' + (-transform.x + viewport.width/2).toFixed(2) + ', ' + (transform.y + viewport.height/2).toFixed(2) + ' ]', lineHeight, lineHeight)
     ctx.textAlign = 'right'
     ctx.fillText('Blocks: ' + container.children.length, viewport.width - lineHeight, lineHeight)
     

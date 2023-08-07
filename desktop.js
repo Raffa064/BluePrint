@@ -163,15 +163,15 @@ function onKeyUp(event) {
 
 function renderDesktopKeys(x, y, lineHeight) {
     var i = 0
-    ctx.textAlign = 'center'
-    
+
     const drawKeyInfo = (label, _shift, _control, _alt, _f) => {
         const { shift, control, alt, f } = commandKeys
         const enabled = shift == _shift && control == _control && alt == _alt && _f == f
         ctx.fillStyle = enabled ? '#aaa' : '#777'
+        ctx.textAlign = 'center'
         ctx.fillText(label, x, y + (i++ * lineHeight))
     }
-    
+
     drawKeyInfo('Shift : Move', true, false, false, false)
     drawKeyInfo('Ctrl : Create', false, true, false, false)
     drawKeyInfo('Shift + Ctrl : Delete', true, true, false, false)

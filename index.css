@@ -104,7 +104,7 @@ div#bp-search-container #search-toggler {
     border-radius: 4px;
 }
 
-div#bp-search-container #search-toggler:hover {
+div#bp-search-container #search-toggler:active {
     background: #aaa2;
 }
 
@@ -142,4 +142,19 @@ div#bp-search-container button {
 
 div#bp-search-container button:hover {
     background: #ddd1;
+}
+
+@media (max-width: 600px) {
+    div#bp-search-container:not(.hidden) {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        width: calc(100vw - 10px);
+        bottom: 0px;
+        border-bottom: none;
+    }
+    
+    div#bp-search-container input {
+        flex: 1;
+    }
 }
