@@ -41,6 +41,11 @@ function setupInputEvents() {
     searchInput.oninput = searchBlocks
     nextButton.onclick = goToNextBlock
     
+    if (isMobile.any) {
+        // TODO: implement mobile input 
+        return    
+    }
+    
     window.addEventListener('mousedown', onMouseDown)
     window.addEventListener('mousemove', onMouseMove)
     window.addEventListener('mouseup', onMouseUp)
@@ -355,6 +360,28 @@ function onKeyUp(event) {
     }
 }
 
+function renderMobileGestures() {
+    // TODO: Implement mobile gesture HUD
+}
+
+function renderDesktopKeys() {
+    var i = 0
+    ctx.textAlign = 'center'
+    
+    const drawKeyInfo = (label, _shift, _control, _alt, _f) => {
+        const { shift, control, alt, f } = commandKeys
+        const enabled = shift == _shift && control == _control && alt == _alt && _f == f
+        ctx.fillStyle = enabled ? '#aaa' : '#777'
+        ctx.fillText(label, x, y + (i++ * lineHeight))
+    }
+    
+    drawKeyInfo('Shift : Move', true, false, false, false)
+    drawKeyInfo('Ctrl : Create', false, true, false, false)
+    drawKeyInfo('Shift + Ctrl : Delete', true, true, false, false)
+    drawKeyInfo('Ctrl + f : Toggle Search', false, true, false, true)
+    drawKeyInfo('Alt : Connect', false, false, true, false)
+}
+
 function renderInfo(fontSize) {
     const x = viewport.width / 2
     const y = 15
@@ -366,22 +393,12 @@ function renderInfo(fontSize) {
     ctx.fillText('Center: [ ' + (-transform.x + viewport.width/2).toFixed(2) + ', ' + (transform.y + viewport.height/2).toFixed(2) + ' ]', lineHeight, lineHeight)
     ctx.textAlign = 'right'
     ctx.fillText('Blocks: ' + container.children.length, viewport.width - lineHeight, lineHeight)
-
-    var i = 0
-    ctx.textAlign = 'center'
-
-    const drawKeyInfo = (label, _shift, _control, _alt, _f) => {
-        const { shift, control, alt, f } = commandKeys
-        const enabled = shift == _shift && control == _control && alt == _alt && _f == f
-        ctx.fillStyle = enabled ? '#aaa' : '#777'
-        ctx.fillText(label, x, y + (i++ * lineHeight))
+    
+    if (isMobile.any) {
+        renderMobileGestures()
+    } else {
+        renderDesktopKeys()
     }
-
-    drawKeyInfo('Shift : Move', true, false, false, false)
-    drawKeyInfo('Ctrl : Create', false, true, false, false)
-    drawKeyInfo('Shift + Ctrl : Delete', true, true, false, false)
-    drawKeyInfo('Ctrl + f : Toggle Search', false, true, false, true)
-    drawKeyInfo('Alt : Connect', false, false, true, false)
 }
 
 function renderDot(x, y, radius, color) {
