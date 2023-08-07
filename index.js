@@ -266,25 +266,27 @@ function renderConnection(from, to) {
     renderDot(transform.x + toX, transform.y + toY, 5, '#f80')
 }
 
-function updateCanvas() {
-    ctx.fillStyle = '#222'
-    ctx.fillRect(0, 0, viewport.width, viewport.height)
-
+function renderGuide() {
     ctx.strokeStyle = '#333'
     ctx.lineWidth = 3
-    ctx.rect(transform.x, transform.y, viewport.width-1.5, viewport.height-1.5)
+    ctx.rect(transform.x, transform.y, viewport.width - 1.5, viewport.height - 1.5)
     ctx.stroke()
-
-    var dots = 0
+    
     const displacement = (x) => x / grid - floor(x / grid)
     for (let x = displacement(transform.x); x < viewport.width / grid; x++) {
         for (let y = displacement(transform.y); y < viewport.height / grid; y++) {
             renderDot(x * grid, y * grid, 1, x % 2 == y % 2 ? '#666' : '#555')
         }
     }
+}
 
-    const fontSize = 15
-    renderHUD(fontSize)
+function updateCanvas() {
+    ctx.fillStyle = '#222'
+    ctx.fillRect(0, 0, viewport.width, viewport.height)
+
+    renderGuide()
+
+    renderHUD(15)
 
     for (const from of state.blocks) {
         for (const to of from.connections) {
