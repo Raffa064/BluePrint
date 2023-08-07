@@ -129,7 +129,7 @@ function setupCanvas() {
 }
 
 function searchBlocks() {
-    searchResults = state.blocks.filter(block => block.innerHTML.includes(searchInput.value))
+    searchResults = state.blocks.filter(block => block.innerHTML.toLowerCase().includes(searchInput.value.toLowerCase()))
     searchIndex = 0
     nextButton.textContent = 'Next (0/' + searchResults.length + ')'
 
