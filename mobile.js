@@ -4,6 +4,7 @@ const HOLD_DURATION = 100
 var waitingForDoubleClick = false
 var holdTimeoutId
 var holdingBlock // before selection
+var targetBlock
 
 function onTouchDown(event) {
     if (waitingForDoubleClick) {
@@ -22,6 +23,8 @@ function onTouchDown(event) {
     holdTimeoutId = setTimeout(() => {
         if (holdingBlock) {
             select(holdingBlock)
+            targetBlock = holdingBlock
+            updateCanvas()
         }
     }, DOUBLE_CLICK_DURATION)
 }
@@ -48,6 +51,12 @@ function onTouchMove(event) {
             dragOffset.x = transform.x + event.touches[0].clientX - rect.x
             dragOffset.y = transform.y + event.touches[0].clientY - rect.y
         }
+
+    }
+    
+    if (selectedBlock) {
+        targetBlock = findBlock(event.touches[0].clientX, event.touches[0].clientY)
+        updateCanvas()
     }
 
     if (isDragging) {
@@ -71,6 +80,7 @@ function onTouchMove(event) {
 
 function onTouchUp(event) {
     isDragging = false
+    targetBlock = null
     updateCanvas()
 
     if (holdingBlock) {
@@ -126,6 +136,7 @@ function renderMobileGestures(x, y, lineHeight) {
         'Connect : Hold + drag to',
         'Delete : Hold',
     ]
+
     for (let i = 0; i < labels.length; i++) {
         ctx.fillStyle = '#777'
         ctx.textAlign = 'center'

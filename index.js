@@ -226,7 +226,7 @@ function renderDot(x, y, radius, color) {
     ctx.fill()
 }
 
-function renderConnection(from, to) {
+function renderConnection(from, to, fake) {
     const canvasRect = canvas.getBoundingClientRect()
 
     const x1 = from.offsetLeft + from.offsetWidth / 2
@@ -253,12 +253,12 @@ function renderConnection(from, to) {
     ctx.beginPath()
     ctx.moveTo(transform.x + fromX, transform.y + fromY)
     ctx.lineTo(transform.x + toX, transform.y + toY)
-    ctx.strokeStyle = 'gray'
+    ctx.strokeStyle = fake? '#aaa5' : 'gray'
     ctx.lineWidth = 4
     ctx.stroke()
 
-    renderDot(transform.x + fromX, transform.y + fromY, 8, '#08f')
-    renderDot(transform.x + toX, transform.y + toY, 5, '#f80')
+    renderDot(transform.x + fromX, transform.y + fromY, 8, fake? '#08fa' : '#08f')
+    renderDot(transform.x + toX, transform.y + toY, 5, fake? '#f80a' : '#f80')
 }
 
 function renderBackground() {
@@ -303,12 +303,25 @@ function renderHUD(fontSize) {
 function updateCanvas() {
     renderBackground()
     renderGuide()
-    renderHUD(isMobile? 13 : 15)
+    renderHUD(isMobile.any ? 13 : 15)
 
     for (const from of state.blocks) {
         for (const to of from.connections) {
             renderConnection(from, to)
         }
+    }
+
+    if (isMobile.any && selectedBlock && targetBlock) {
+        if (targetBlock == selectedBlock) {
+            const rect = getBlockRect(targetBlock)
+            ctx.fillStyle = '#ed7'
+            ctx.textAlign = 'center'
+            ctx.fontSize = '20px'
+            ctx.fillText('This block will be deleted', rect.x + rect.width / 2, rect.y - 10)
+            return
+        }
+        
+        renderConnection(selectedBlock, targetBlock, true)
     }
 
 }
