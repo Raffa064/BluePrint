@@ -248,6 +248,12 @@ function onMouseDown(event) {
     }
 
     if (event.altKey) {
+        if (!clickedBlock) {
+            event.preventDefault()
+            unselect()
+            return
+        }
+        
         if (clickedBlock && !isConnecting) {
             event.preventDefault()
 
