@@ -435,6 +435,7 @@ function updateCanvas() {
             renderDot(x * grid, y * grid, 1, x % 2 == y % 2 ? '#666' : '#555')
         }
     }
+    
     const fontSize = 15
     renderInfo(fontSize)
 
