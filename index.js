@@ -35,6 +35,13 @@ updateCanvas()
 
 function handleMenuOption(option) {
     const options = {
+        'create-new': function() {
+            // TODO: create project dialog
+        },
+        'load': function() {
+            // TODO: load/manage project dialog
+
+        },
         'export': function() {
             save()
             const blob = new Blob([window.localStorage.data], { type: 'application/json' })
@@ -65,7 +72,7 @@ function handleMenuOption(option) {
             input.click()
         }
     }
-    
+
     options[option]()
     toggleMenu()
 }

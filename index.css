@@ -71,7 +71,7 @@ div#bp-container {
     white-space: nowrap;
 }
 
-.block span:not(:focus) {
+.block span:not(:focus), #menu-container * {
     user-select: none;
     -ms-user-select: none;
     -moz-user-select: none;
@@ -168,22 +168,18 @@ div#bp-search-container button:hover {
 
 div#menu-container {
     position: fixed;
-    right: 10px;
-    bottom: 10px;
-    display: inline-flex;
+    display: flex;
     justify-content: center;
     align-items: center;
+    right: 10px;
+    bottom: 10px;
     width: 2rem;
     height: 2rem;
     background: #2224;
     color: #aaa;
     border: 1px solid #aaa7;
     border-radius: 4px;
-    backdrop-filter: blur(5px);
-}
-
-div#menu-container:not(.openned) > *:not(span) {
-    display: none;
+    overflow: hidden;
 }
 
 div#menu-container.openned #close {
@@ -202,10 +198,6 @@ div#menu-container.openned #open {
     display: none;
 }
 
-div#menu-container:not(.openned) ul {
-    display: none;
-}
-
 div#menu-container ul {
     list-style: none;
     position: fixed;
@@ -219,6 +211,14 @@ div#menu-container ul {
     backdrop-filter: blur(5px);
 }
 
+div#menu-container.openned ul {
+    animation: fade-in 1s forwards;
+}
+
+div#menu-container:not(.openned) ul {
+    animation: fade-out 1s forwards;
+}
+
 div#menu-container ul button {
     width: 100px;
     padding: 10px;
@@ -226,7 +226,6 @@ div#menu-container ul button {
     color: #aaa;
     border: 1px solid #aaa7;
     border-radius: 4px;
-    backdrop-filter: blur(5px);
     transition: .2s;
 }
 
@@ -235,7 +234,7 @@ div#menu-container ul button:active {
 }
 
 div#menu-container ul li + li {
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 @media (max-width: 600px) {
@@ -254,5 +253,26 @@ div#menu-container ul li + li {
 
     div#bp-search-container:not(.hidden) + div#menu-container {
         display: none;
+    }
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fade-out {
+    0% {
+        opacity: 1;
+    }
+    
+    100% {
+        opacity: 0;
+        visibility: hidden;
     }
 }
