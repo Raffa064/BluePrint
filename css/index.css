@@ -1,0 +1,55 @@
+:root {
+    --translate-x: 0px;
+    --translate-y: 0px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    border: none;
+    outline: none;
+}
+
+html {
+    position: relative;
+}
+
+html,
+body {
+    width: 100vw;
+    height: 100vh;
+    background: #222;
+    overflow: hidden;
+}
+
+html {
+    background: #00f;
+}
+
+canvas#bp-canvas,
+div#bp-container {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+}
+
+canvas {
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+}
+
+div#bp-container {
+    outline: 30px solid red;
+    overflow: hidden;
+}
+
+/*Block*/
+
+/*Search Container*/
+
+/*Menu*/

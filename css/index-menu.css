@@ -1,0 +1,91 @@
+div#menu-container {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: 10px;
+    bottom: 10px;
+    width: 2rem;
+    height: 2rem;
+    background: #2224;
+    color: #aaa;
+    border: 1px solid #aaa7;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+div#menu-container.openned #close {
+    display: inline;
+}
+
+div#menu-container:not(.openned) #close {
+    display: none;
+}
+
+div#menu-container:not(.openned) #open {
+    display: inline;
+}
+
+div#menu-container.openned #open {
+    display: none;
+}
+
+div#menu-container ul {
+    list-style: none;
+    position: fixed;
+    right: 10px;
+    bottom: 3rem;
+    padding: 10px;
+    background: #2224;
+    color: #aaa;
+    border: 1px solid #aaa7;
+    border-radius: 4px;
+    backdrop-filter: blur(5px);
+}
+
+div#menu-container.openned ul {
+    animation: fade-in 1s forwards;
+}
+
+div#menu-container:not(.openned) ul {
+    animation: fade-out 1s forwards;
+}
+
+div#menu-container ul button {
+    width: 100px;
+    padding: 10px;
+    background: #2224;
+    color: #aaa;
+    border: 1px solid #aaa7;
+    border-radius: 4px;
+    transition: .2s;
+}
+
+div#menu-container ul button:active {
+    background: #aaa2;
+}
+
+div#menu-container ul li+li {
+    margin-top: 5px;
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fade-out {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}

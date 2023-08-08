@@ -1,3 +1,6 @@
+const isMobile = {
+    any: true
+}
 const { floor, PI, sqrt, min, max } = Math
 
 const rootTheme = document.querySelector(':root')
