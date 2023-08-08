@@ -13,12 +13,19 @@
     outline: none;
 }
 
-html, body {
+html {
     position: relative;
+}
+
+html, body {
     width: 100vw;
     height: 100vh;
     background: #222;
     overflow: hidden;
+}
+
+html {
+    background: #00f;
 }
 
 canvas#bp-canvas,
@@ -33,6 +40,11 @@ div#bp-container {
 canvas {
     image-rendering: crisp-edges;
     image-rendering: pixelated;
+}
+
+div#bp-container {
+    outline: 30px solid red;
+    overflow: hidden;
 }
 
 .block {
@@ -55,6 +67,7 @@ canvas {
     text-align: center;
     outline: none;
     font-size: 14px;
+    white-space: nowrap;
 }
 
 .block span:not(:focus) {

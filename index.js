@@ -73,7 +73,6 @@ function save() {
             content: block.innerHTML
         }
         data.blocks.push(blockData)
-
         block.connections.forEach((other) => {
             data.connections.push([block.id, other.id])
         })
@@ -253,7 +252,7 @@ function renderConnection(from, to, fake) {
     ctx.beginPath()
     ctx.moveTo(transform.x + fromX, transform.y + fromY)
     ctx.lineTo(transform.x + toX, transform.y + toY)
-    ctx.strokeStyle = fake? '#aaa5' : 'gray'
+    ctx.strokeStyle = fake? '#aaa3' : '#aaa6'
     ctx.lineWidth = 4
     ctx.stroke()
 

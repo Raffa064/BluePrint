@@ -1,5 +1,5 @@
 const DOUBLE_CLICK_DURATION = 180
-const HOLD_DURATION = 100
+const HOLD_DURATION = 200
 
 var waitingForDoubleClick = false
 var holdTimeoutId
