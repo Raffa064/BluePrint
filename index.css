@@ -17,7 +17,8 @@ html {
     position: relative;
 }
 
-html, body {
+html,
+body {
     width: 100vw;
     height: 100vh;
     background: #222;
@@ -97,7 +98,7 @@ div#bp-search-container {
     backdrop-filter: blur(5px);
 }
 
-div#bp-search-container > * {
+div#bp-search-container>* {
     vertical-align: middle;
 }
 
@@ -105,7 +106,7 @@ div#bp-search-container.hidden:not(.mobile) {
     display: none;
 }
 
-div#bp-search-container.mobile.hidden > * {
+div#bp-search-container.mobile.hidden>* {
     display: none;
 }
 
@@ -165,6 +166,78 @@ div#bp-search-container button:hover {
     background: #ddd1;
 }
 
+div#menu-container {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 2rem;
+    height: 2rem;
+    background: #2224;
+    color: #aaa;
+    border: 1px solid #aaa7;
+    border-radius: 4px;
+    backdrop-filter: blur(5px);
+}
+
+div#menu-container:not(.openned) > *:not(span) {
+    display: none;
+}
+
+div#menu-container.openned #close {
+    display: inline;
+}
+
+div#menu-container:not(.openned) #close {
+    display: none;
+}
+
+div#menu-container:not(.openned) #open {
+    display: inline;
+}
+
+div#menu-container.openned #open {
+    display: none;
+}
+
+div#menu-container:not(.openned) ul {
+    display: none;
+}
+
+div#menu-container ul {
+    list-style: none;
+    position: fixed;
+    right: 10px;
+    bottom: 3rem;
+    padding: 10px;
+    background: #2224;
+    color: #aaa;
+    border: 1px solid #aaa7;
+    border-radius: 4px;
+    backdrop-filter: blur(5px);
+}
+
+div#menu-container ul button {
+    width: 100px;
+    padding: 10px;
+    background: #2224;
+    color: #aaa;
+    border: 1px solid #aaa7;
+    border-radius: 4px;
+    backdrop-filter: blur(5px);
+    transition: .2s;
+}
+
+div#menu-container ul button:active {
+    background: #aaa2;
+}
+
+div#menu-container ul li + li {
+    margin-top: 10px;
+}
+
 @media (max-width: 600px) {
     div#bp-search-container:not(.hidden) {
         display: flex;
@@ -174,8 +247,12 @@ div#bp-search-container button:hover {
         bottom: 0px;
         border-bottom: none;
     }
-    
+
     div#bp-search-container input {
         flex: 1;
+    }
+
+    div#bp-search-container:not(.hidden) + div#menu-container {
+        display: none;
     }
 }

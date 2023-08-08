@@ -8,6 +8,8 @@ const searchContainer = document.querySelector('#bp-search-container')
 const searchToggler = document.querySelector('#search-toggler')
 const searchInput = document.querySelector('#search-input')
 const nextButton = document.querySelector('#search-next-button')
+const menuContainer = document.querySelector('#menu-container')
+const menuTogglers = document.querySelectorAll("#menu-container > span")
 
 const state = {
     globalId: 0,
@@ -31,15 +33,60 @@ setupSaveLoadFeatures()
 setupCanvas(viewport, canvasQuality)
 updateCanvas()
 
+function handleMenuOption(option) {
+    const options = {
+        'export': function() {
+            save()
+            const blob = new Blob([window.localStorage.data], { type: 'application/json' })
+            const downloadUrl = URL.createObjectURL(blob)
+            const link = document.createElement('a')
+            link.href = downloadUrl
+            link.download = 'BluePrint-save-' + (Date.now() / 1000) + '.json'
+            link.click()
+            URL.revokeObjectURL(blob)
+        },
+        'import': function() {
+            const input = document.createElement('input')
+            input.type = 'file'
+            input.onchange = (event) => {
+                const file = event.target.files[0]
+                reader = new FileReader()
+                reader.onload = (e) => {
+                    window.localStorage.data = e.target.result
+                    container.innerHTML = ''
+                    state.globalId = 0
+                    state.blocks = []
+                    load()
+                    save()
+                    updateCanvas()
+                }
+                reader.readAsText(file)
+            }
+            input.click()
+        }
+    }
+    
+    options[option]()
+    toggleMenu()
+}
+
 function toggleSearch() {
     if (!searchContainer.classList.toggle('hidden')) {
         searchInput.focus()
     }
 }
 
+function toggleMenu() {
+    menuContainer.classList.toggle('openned')
+}
+
 function setupInputEvents() {
     searchInput.oninput = searchBlocks
     nextButton.onclick = goToNextBlock
+
+    menuTogglers.forEach(toggler => {
+        toggler.onclick = toggleMenu
+    })
 
     if (isMobile.any) {
         searchContainer.classList.add('mobile')
@@ -78,11 +125,11 @@ function save() {
         })
     })
 
-    localStorage.data = JSON.stringify(data)
+    window.localStorage.data = JSON.stringify(data)
 }
 
 function load() {
-    const data = localStorage.data
+    const data = window.localStorage.data
 
     if (data) {
         const json = JSON.parse(data)
@@ -252,12 +299,12 @@ function renderConnection(from, to, fake) {
     ctx.beginPath()
     ctx.moveTo(transform.x + fromX, transform.y + fromY)
     ctx.lineTo(transform.x + toX, transform.y + toY)
-    ctx.strokeStyle = fake? '#aaa3' : '#aaa6'
+    ctx.strokeStyle = fake ? '#aaa3' : '#aaa6'
     ctx.lineWidth = 4
     ctx.stroke()
 
-    renderDot(transform.x + fromX, transform.y + fromY, 8, fake? '#08fa' : '#08f')
-    renderDot(transform.x + toX, transform.y + toY, 5, fake? '#f80a' : '#f80')
+    renderDot(transform.x + fromX, transform.y + fromY, 8, fake ? '#08fa' : '#08f')
+    renderDot(transform.x + toX, transform.y + toY, 5, fake ? '#f80a' : '#f80')
 }
 
 function renderBackground() {
@@ -319,7 +366,7 @@ function updateCanvas() {
             ctx.fillText('This block will be deleted', rect.x + rect.width / 2, rect.y - 10)
             return
         }
-        
+
         renderConnection(selectedBlock, targetBlock, true)
     }
 
