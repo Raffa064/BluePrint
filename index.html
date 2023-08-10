@@ -21,18 +21,18 @@
 </head>
 
 <body>
-    <canvas id="bp-canvas"></canvas>
+    <canvas id="canvas"></canvas>
     
-    <div id="bp-container"></div>
+    <div id="container"></div>
     
-    <div class="hidden" id="bp-search-container">
+    <div class="hidden" id="search-container">
         <span id='search-toggler'><ion-icon name="search-outline"></ion-icon></span>
         <input id="search-input" type="text" autocomplete="off" placeholder="Search"/> <button id="search-next-button">Next (0/0)</button>
     </div>
     
     <div id="menu-container">
-        <span id="open"><ion-icon name="menu-outline"></ion-icon></span>
-        <span id="close"><ion-icon name="close-outline"></ion-icon></span>
+        <span id="open-icon"><ion-icon name="menu-outline"></ion-icon></span>
+        <span id="close-icon"><ion-icon name="close-outline">Close</ion-icon></span>
         <ul>
             <li><button id="create-new" onClick="handleMenuOption(id)">New</button></li>
             <li><button id="load" onClick="handleMenuOption(id)">Load</button></li>

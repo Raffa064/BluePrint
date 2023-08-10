@@ -1,8 +1,5 @@
-div#menu-container {
+#menu-container {
     position: fixed;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     right: 10px;
     bottom: 10px;
     width: 2rem;
@@ -12,25 +9,32 @@ div#menu-container {
     border: 1px solid #aaa7;
     border-radius: 4px;
     overflow: hidden;
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
 }
 
-div#menu-container.openned #close {
+#menu-container #open-icon, 
+#menu-container #close-icon {
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    backdrop-filter: blur(5px);
+    font-size: 1.5rem;
+}
+
+#menu-container.openned #close-icon,
+#menu-container:not(.openned) #open-icon {
     display: inline;
 }
 
-div#menu-container:not(.openned) #close {
+#menu-container.openned #open-icon,
+#menu-container:not(.openned) #close-icon {
     display: none;
 }
 
-div#menu-container:not(.openned) #open {
-    display: inline;
-}
-
-div#menu-container.openned #open {
-    display: none;
-}
-
-div#menu-container ul {
+#menu-container ul {
     list-style: none;
     position: fixed;
     right: 10px;
@@ -41,17 +45,18 @@ div#menu-container ul {
     border: 1px solid #aaa7;
     border-radius: 4px;
     backdrop-filter: blur(5px);
+    transition: .2s;
 }
 
-div#menu-container.openned ul {
-    animation: fade-in 1s forwards;
+#menu-container:not(.openned) ul {
+    display: none;
 }
 
-div#menu-container:not(.openned) ul {
-    animation: fade-out 1s forwards;
+#menu-container li+li {
+    margin-top: 5px;
 }
 
-div#menu-container ul button {
+#menu-container button {
     width: 100px;
     padding: 10px;
     background: #2224;
@@ -61,31 +66,6 @@ div#menu-container ul button {
     transition: .2s;
 }
 
-div#menu-container ul button:active {
+#menu-container button:active {
     background: #aaa2;
-}
-
-div#menu-container ul li+li {
-    margin-top: 5px;
-}
-
-@keyframes fade-in {
-    0% {
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 1;
-    }
-}
-
-@keyframes fade-out {
-    0% {
-        opacity: 1;
-    }
-
-    100% {
-        opacity: 0;
-        visibility: hidden;
-    }
 }

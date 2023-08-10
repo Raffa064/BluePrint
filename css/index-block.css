@@ -13,7 +13,7 @@
     border: 2px solid #f08;
 }
 
-.block span {
+.block .content {
     display: block;
     text-align: center;
     outline: none;
@@ -21,7 +21,7 @@
     white-space: nowrap;
 }
 
-.block span:not(:focus), #menu-container * {
+.block .content:not(:focus) {
     user-select: none;
     -ms-user-select: none;
     -moz-user-select: none;

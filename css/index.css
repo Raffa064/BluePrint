@@ -29,8 +29,8 @@ html {
     background: #00f;
 }
 
-canvas#bp-canvas,
-div#bp-container {
+#canvas,
+#container {
     position: absolute;
     top: 0px;
     left: 0px;
@@ -38,18 +38,12 @@ div#bp-container {
     height: 100vh;
 }
 
-canvas {
+#canvas {
     image-rendering: crisp-edges;
     image-rendering: pixelated;
 }
 
-div#bp-container {
+#container {
     outline: 30px solid red;
     overflow: hidden;
 }
-
-/*Block*/
-
-/*Search Container*/
-
-/*Menu*/

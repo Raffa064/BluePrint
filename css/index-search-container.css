@@ -1,4 +1,4 @@
-div#bp-search-container {
+#search-container {
     position: fixed;
     bottom: 10px;
     left: 50%;
@@ -10,19 +10,21 @@ div#bp-search-container {
     backdrop-filter: blur(5px);
 }
 
-div#bp-search-container>* {
+#search-container #search-toggler,
+#search-container input, 
+#search-container button {
     vertical-align: middle;
 }
 
-div#bp-search-container.hidden:not(.mobile) {
+#search-container.hidden:not(.mobile) {
     display: none;
 }
 
-div#bp-search-container.mobile.hidden>* {
+#search-container.mobile.hidden>* {
     display: none;
 }
 
-div#bp-search-container #search-toggler {
+#search-container #search-toggler {
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -34,19 +36,19 @@ div#bp-search-container #search-toggler {
     border-radius: 4px;
 }
 
-div#bp-search-container #search-toggler:active {
+#search-container #search-toggler:active {
     background: #aaa2;
 }
 
-div#bp-search-container:not(.hidden) #search-toggler {
+#search-container:not(.hidden) #search-toggler {
     margin-right: 6px;
 }
 
-div#bp-search-container:not(.mobile) #search-toggler {
+#search-container:not(.mobile) #search-toggler {
     display: none;
 }
 
-div#bp-search-container input {
+#search-container input {
     width: 200px;
     padding: 10px;
     background: transparent;
@@ -57,15 +59,15 @@ div#bp-search-container input {
     border: 1px solid transparent;
 }
 
-div#bp-search-container input:focus {
+#search-container input:focus {
     border: 1px solid #aaa7;
 }
 
-div#bp-search-container input.error {
+#search-container input.error {
     border-bottom: 1px solid red;
 }
 
-div#bp-search-container button {
+#search-container button {
     padding: 10px;
     margin-left: 10px;
     background: #aaa1;
@@ -74,12 +76,12 @@ div#bp-search-container button {
     transition: .2s;
 }
 
-div#bp-search-container button:hover {
+#search-container button:hover {
     background: #ddd1;
 }
 
 @media (max-width: 600px) {
-    div#bp-search-container:not(.hidden) {
+    #search-container:not(.hidden) {
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -88,11 +90,11 @@ div#bp-search-container button:hover {
         border-bottom: none;
     }
 
-    div#bp-search-container input {
+    #search-container input {
         flex: 1;
     }
 
-    div#bp-search-container:not(.hidden) + div#menu-container {
+    #search-container:not(.hidden) + #menu-container {
         display: none;
     }
 }

@@ -1,13 +1,10 @@
-const isMobile = {
-    any: true
-}
 const { floor, PI, sqrt, min, max } = Math
 
 const rootTheme = document.querySelector(':root')
-const canvas = document.querySelector('#bp-canvas')
+const canvas = document.querySelector('#canvas')
 const ctx = canvas.getContext('2d')
-const container = document.querySelector('#bp-container')
-const searchContainer = document.querySelector('#bp-search-container')
+const container = document.querySelector('#container')
+const searchContainer = document.querySelector('#search-container')
 const searchToggler = document.querySelector('#search-toggler')
 const searchInput = document.querySelector('#search-input')
 const nextButton = document.querySelector('#search-next-button')
@@ -31,6 +28,7 @@ var selectedBlock;
 var searchResults = []
 var searchIndex = 0
 
+checkMobileDevice()
 setupInputEvents()
 setupSaveLoadFeatures()
 setupCanvas(viewport, canvasQuality)
@@ -78,6 +76,19 @@ function handleMenuOption(option) {
 
     options[option]()
     toggleMenu()
+}
+
+function checkMobileDevice() {
+    try {
+        console.log(isMobile.any)
+    } catch {
+        console.log("Error on load isMobile.js")
+        window.isMobile = {
+            any: window.screen.width < 600
+        }
+    }
+    
+    console.log('isMobile: '+isMobile.any)
 }
 
 function toggleSearch() {
@@ -223,7 +234,7 @@ function createBlock(x = 0, y = 0, id) {
     const block = document.createElement('div')
     block.id = id
     block.className = 'block'
-    block.innerHTML = '<span contenteditable="true">Block</span>'
+    block.innerHTML = '<span class="content" contenteditable="true">Block</span>'
 
     block.style.left = snapToGrid(x) + 'px'
     block.style.top = snapToGrid(y) + 'px'
