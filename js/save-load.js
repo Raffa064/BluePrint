@@ -7,13 +7,13 @@ var currentProject
 
 function loadProjectList() {
     var list
-    
+
     if (localStorage['project-list']) {
         list = JSON.parse(localStorage['project-list'])
     } else {
         list = []
     }
-    
+
     list.getProject = function(projectName) {
         return this.find(p => p.name === projectName)
     }
@@ -23,7 +23,7 @@ function loadProjectList() {
 
 function createProject(projectName) {
     const project = {
-        name: projectName,
+        name: projectName.trim(),
         globalId: 0,
         blocks: [],
         connections: []
@@ -34,11 +34,32 @@ function createProject(projectName) {
     return project
 }
 
+function isValidProjectName(name) {
+    return name.match(/^[A-z_]{1,}[A-z_0-9]*$/)
+}
+
+function renameProject(project, newName) {
+    if (project.name == newName) return
+    
+    if (projectList.getProject(newName) == null && isValidProjectName(newName)) {
+        if (currentProject === project.name) {
+            currentProject = newName
+            localStorage.currentProject = currentProject
+            updateCanvas()
+        }
+
+        project.name = newName
+        return true
+    }
+
+    return false
+}
+
 function loadProject(projectName) {
     const project = projectList.getProject(projectName)
-    
+
     if (!project) return false
-    
+
     if (saveInterval) {
         save()
         clearInterval(saveInterval)
@@ -47,10 +68,12 @@ function loadProject(projectName) {
 
     currentProject = projectName
     localStorage.currentProject = currentProject
+    resetState()
     loadState()
+    updateCanvas()
 
     saveInterval = setInterval(save, SAVE_DELAY)
-    
+
     return true
 }
 
@@ -100,6 +123,6 @@ function save() {
     projectList.splice(projectList.indexOf(project), 1, data)
 
     localStorage['project-list'] = JSON.stringify(projectList)
-    
+
     localStorage.saveCount = parseInt(localStorage.saveCount || 0) + 1
 }

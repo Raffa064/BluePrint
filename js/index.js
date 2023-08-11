@@ -1,4 +1,4 @@
-const { floor, PI, sqrt, min, max } = Math
+const { floor, PI, sqrt, min, max, random } = Math
 
 const rootTheme = document.querySelector(':root')
 const canvas = document.querySelector('#canvas')
@@ -10,6 +10,11 @@ const searchInput = document.querySelector('#search-input')
 const nextButton = document.querySelector('#search-next-button')
 const menuContainer = document.querySelector('#menu-container')
 const menuTogglers = document.querySelectorAll("#menu-container > span")
+const manager = document.querySelector('#manager')
+const managerModal = document.querySelector('#manager .modal')
+const managerSearchBar = document.querySelector('#manager #search-bar')
+const managerProjectList = document.querySelector('#manager #project-list')
+const managerProjectCreate = document.querySelector('#manager #project-create')
 
 const state = {
     globalId: 0,
@@ -31,13 +36,22 @@ var searchIndex = 0
 checkMobileDevice()
 setupInputEvents()
 setupSaveLoadFeatures()
+setupProjectManager()
 setupCanvas(viewport, canvasQuality)
 updateCanvas()
+
+function resetState() {
+    container.innerHTML = ''
+    state.globalId = 0
+    state.blocks = []
+    translateTo(0, 0)
+}
 
 function handleMenuOption(option) {
     const options = {
         'project': function() {
-            // TODO: create project dialog
+            toggleManager()
+            searchProject('')
         },
         'export': function() {
             save()
@@ -57,9 +71,7 @@ function handleMenuOption(option) {
                 reader = new FileReader()
                 reader.onload = (e) => {
                     window.localStorage.data = e.target.result
-                    container.innerHTML = ''
-                    state.globalId = 0
-                    state.blocks = []
+                    resetState()
                     load()
                     save()
                     updateCanvas()
@@ -76,15 +88,15 @@ function handleMenuOption(option) {
 
 function checkMobileDevice() {
     try {
-        console.log(isMobile.any)
+        console.log('Check is mobile: ' + isMobile.any)
     } catch {
         console.log("Error on load isMobile.js")
         window.isMobile = {
             any: window.screen.width < 600
         }
     }
-    
-    console.log('isMobile: '+isMobile.any)
+
+    console.log('isMobile: ' + isMobile.any)
 }
 
 function toggleSearch() {
@@ -128,6 +140,98 @@ function setupSaveLoadFeatures() {
         createProject(current)
         loadProject(current)
     }
+}
+
+function searchProject(query) {
+    managerProjectList.innerHTML = ''
+
+    const projects = projectList.filter((p) => {
+        return p.name.toLowerCase().includes(query.trim().toLowerCase())
+    })
+
+    projects.forEach((project) => {
+        const projectItem = document.createElement('li')
+        projectItem.classList.add('project-item')
+        managerProjectList.appendChild(projectItem)
+
+        const projectName = document.createElement('p')
+        projectName.classList.add('project-name')
+        projectName.innerText = project.name
+        projectName.contentEditable = 'true'
+        projectName.addEventListener('input', () => {
+            if (renameProject(project, projectName.innerText)) {
+                projectName.classList.remove('error')
+                return
+            }
+
+            projectName.classList.add('error')
+        })
+        projectItem.appendChild(projectName)
+
+        const projectDelete = document.createElement('button')
+        projectDelete.classList.add('project-option')
+        projectDelete.innerText = 'Delete'
+        var clickCount = 0
+        projectDelete.addEventListener('click', () => {
+            clickCount++
+            projectDelete.innerText = 'Twice!'
+
+            setTimeout(() => {
+                if (clickCount > 2) {
+                    projectList.splice(project, 1)
+                    searchProject(query)
+                    return
+                }
+
+                projectDelete.innerText = 'Delete'
+            }, 180)
+        })
+
+        if (project.name != currentProject) {
+            projectItem.appendChild(projectDelete)
+        }
+
+        const projectOpen = document.createElement('button')
+        projectOpen.classList.add('project-option')
+        projectItem.appendChild(projectOpen)
+        projectOpen.addEventListener('click', () => {
+            loadProject(project.name)
+            toggleManager()
+        })
+        projectOpen.innerText = 'Open'
+    })
+}
+
+function toggleManager() {
+    manager.classList.toggle('openned')
+}
+
+function generateHash(size) {
+    var hash = ''
+    for (let i = 0; i < size; i++) {
+        hash += floor(random() * 16).toString(16)
+    }
+    
+    return hash
+}
+
+function setupProjectManager() {
+    manager.addEventListener('click', (event) => {
+        if (event.target == manager) {
+            event.preventDefault()
+            toggleManager()
+        }
+    })
+
+    managerSearchBar.addEventListener('input', () => {
+        searchProject(managerSearchBar.value)
+    })
+    
+    managerProjectCreate.addEventListener('click', () => {
+        const newProjectName = 'New-Project-'+generateHash(10)
+        createProject(newProjectName)
+        searchProject(newProjectName)
+    })
 }
 
 function setupCanvas() {
@@ -313,7 +417,7 @@ function renderHUD(fontSize) {
     ctx.fillStyle = '#aaa'
     ctx.textAlign = 'left'
     ctx.fillText(currentProject, lineHeight, viewport.height - lineHeight)
-    
+
     const x = viewport.width / 2
     const y = lineHeight
 

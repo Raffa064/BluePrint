@@ -1,13 +1,18 @@
 #manager {
-    position: absolute;
-    top: 0px;
-    left: 0px;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: fixed;
+    top: 0px;
+    left: 0px;
     width: 100vw;
     height: 100vh;
     background: #1115;
+    z-index: 55;
+}
+
+#manager:not(.openned) {
+    display: none;
 }
 
 #manager * {
@@ -63,7 +68,7 @@
     flex-direction: row;
     align-items: center;
     padding: 10px;
-    margin-top: 10px;
+    margin-bottom: 10px;
     border-radius: 4px;
     border: 1px solid #aaa3;
 }
@@ -81,7 +86,11 @@
     border: 1px solid #aaa7;
 }
 
-#manager .project-option + .project-option {
+#manager .project-name.error {
+    border: 1px solid #f00;
+}
+
+#manager .project-option+.project-option {
     margin-left: 10px;
 }
 
@@ -99,5 +108,19 @@
 }
 
 #manager .project-option:active {
+    background: #aaa2;
+}
+
+#manager #project-create {
+    width: 100%;
+    height: 1.9rem;
+    margin-top: 7px; 
+    background: transparent;
+    color: #aaa;
+    border-radius: 4px;
+    border: 1px solid #aaa2;
+}
+
+#manager #project-create:hover {
     background: #aaa2;
 }

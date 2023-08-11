@@ -1,7 +1,28 @@
 if (location.host.startsWith('localhost')) {
     console.log('DEBUG ENABLED')
     
-    logData()
+    function testProjectNames() {
+        const names = [
+            ['Project', true],
+            ['Proj3ct', true],
+            ['Pro_ject', true],
+            ['_Project', true],
+            ['Project_', true],
+            ['Pro ject', false],
+            ['Pro-ject', false],
+            ['120Pro-ject', false],
+            ['#Project', false],
+            ['P roject', false],
+            [' Project', false]
+        ]
+        
+        for (test of names) {
+            if (isValidProjectName(test[0]) != test[1]) {
+                console.log('REGEX ERROR ON isValidProjectName()')
+                return
+            }
+        }
+    }
     
     function wipeData() {
         clearInterval(saveInterval)
