@@ -8,7 +8,7 @@ var targetBlock
 
 function onTouchDown(event) {
     if (event.touches.length > 1) return
-    
+
     if (waitingForDoubleClick) {
         //Double click
         waitingForDoubleClick = false
@@ -33,7 +33,7 @@ function onTouchDown(event) {
 
 function onTouchMove(event) {
     if (event.touches.length > 1) return
-    
+
     clearTimeout(holdTimeoutId)
 
     if (!isDragging) {
@@ -57,7 +57,7 @@ function onTouchMove(event) {
         }
 
     }
-    
+
     if (selectedBlock) {
         targetBlock = findBlock(event.touches[0].clientX, event.touches[0].clientY)
         updateCanvas()
@@ -84,7 +84,7 @@ function onTouchMove(event) {
 
 function onTouchUp(event) {
     if (event.changedTouches.length > 1) return
-    
+
     isDragging = false
     targetBlock = null
     updateCanvas()
@@ -136,6 +136,10 @@ function onTouchUp(event) {
 }
 
 function renderMobileGestures(x, y, lineHeight) {
+    ctx.fillStyle = '#aaa'
+    ctx.textAlign = 'center'
+    ctx.fillText(currentProject, x, lineHeight)
+    
     const labels = [
         'Move : Drag',
         'Create : Double click',
@@ -146,6 +150,6 @@ function renderMobileGestures(x, y, lineHeight) {
     for (let i = 0; i < labels.length; i++) {
         ctx.fillStyle = '#777'
         ctx.textAlign = 'center'
-        ctx.fillText(labels[i], x, y + (i * lineHeight))
+        ctx.fillText(labels[i], x, y + ((i + 1) * lineHeight))
     }
 }

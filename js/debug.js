@@ -51,6 +51,7 @@ if (location.host.startsWith('localhost')) {
         }
         
         setupInputEvents()
+        updateCanvas()
     }
     
     function logData() {

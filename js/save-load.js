@@ -86,7 +86,7 @@ function loadState() {
         project.blocks.forEach((blockData) => {
             const { id, x, y, content } = blockData
             const block = createBlock(x, y, id)
-            block.innerHTML = content
+            block.setContent(content)
             loadedBlocks[id] = block
         })
         project.connections.forEach((connection) => {
@@ -111,7 +111,7 @@ function save() {
             id: block.id,
             x: block.offsetLeft,
             y: block.offsetTop,
-            content: block.innerHTML
+            content: block.getContent()
         }
         data.blocks.push(blockData)
         block.connections.forEach((other) => {

@@ -1,5 +1,6 @@
 const { floor, PI, sqrt, min, max, random } = Math
 
+
 const rootTheme = document.querySelector(':root')
 const canvas = document.querySelector('#canvas')
 const ctx = canvas.getContext('2d')
@@ -55,11 +56,12 @@ function handleMenuOption(option) {
         },
         'export': function() {
             save()
-            const blob = new Blob([window.localStorage.data], { type: 'application/json' })
+            const projectJson = JSON.stringify(projectList.getProject(currentProject))
+            const blob = new Blob([projectJson], { type: 'application/json' })
             const downloadUrl = URL.createObjectURL(blob)
             const link = document.createElement('a')
             link.href = downloadUrl
-            link.download = 'BluePrint-save-' + (Date.now() / 1000) + '.json'
+            link.download = 'BluePrint-'+currentProject+'-' + floor(Date.now() / 1000) + '.json'
             link.click()
             URL.revokeObjectURL(blob)
         },
@@ -70,9 +72,13 @@ function handleMenuOption(option) {
                 const file = event.target.files[0]
                 reader = new FileReader()
                 reader.onload = (e) => {
-                    window.localStorage.data = e.target.result
+                    const projectData = JSON.parse(e.target.result)
+                    while (projectList.getProject(projectData.name)) {
+                        projectData.name += '_imported_'+floor(Date.now()/1000)
+                    }
+                    projectList.push(projectData)
                     resetState()
-                    load()
+                    loadProject(projectData.name)
                     save()
                     updateCanvas()
                 }
@@ -127,11 +133,11 @@ function setupInputEvents() {
         return
     }
 
-    container.addEventListener('mousedown', onMouseDown)
-    container.addEventListener('mousemove', onMouseMove)
-    container.addEventListener('mouseup', onMouseUp)
-    container.addEventListener('keydown', onKeyDown)
-    container.addEventListener('keyup', onKeyUp)
+    window.addEventListener('mousedown', onMouseDown)
+    window.addEventListener('mousemove', onMouseMove)
+    window.addEventListener('mouseup', onMouseUp)
+    window.addEventListener('keydown', onKeyDown)
+    window.addEventListener('keyup', onKeyUp)
 }
 
 function setupSaveLoadFeatures() {
@@ -225,7 +231,7 @@ function setupProjectManager() {
 
     managerSearchBar.oninput = () => {
         searchProject(managerSearchBar.value)
-    })
+    }
     
     managerProjectCreate.onclick = () => {
         const newProjectName = 'New-Project-'+generateHash(10)
@@ -292,10 +298,18 @@ function createBlock(x = 0, y = 0, id) {
     block.id = id
     block.className = 'block'
     block.innerHTML = '<span class="content" contenteditable="true">Block</span>'
-
+    
+    const content = block.querySelector('.content')
+        
     block.style.left = snapToGrid(x) + 'px'
     block.style.top = snapToGrid(y) + 'px'
     block.connections = []
+    block.setContent = (contentStr) => {
+        content.innerHTML = contentStr
+    }
+    block.getContent = () => {
+        return content.innerHTML
+    }
 
     container.appendChild(block)
     state.blocks.push(block)
@@ -413,10 +427,6 @@ function renderHUD(fontSize) {
     ctx.fillText('[ ' + (-transform.x + viewport.width / 2).toFixed(2) + ', ' + (transform.y + viewport.height / 2).toFixed(2) + ' ]', lineHeight, lineHeight)
     ctx.textAlign = 'right'
     ctx.fillText('Blocks: ' + container.children.length, viewport.width - lineHeight, lineHeight)
-
-    ctx.fillStyle = '#aaa'
-    ctx.textAlign = 'left'
-    ctx.fillText(currentProject, lineHeight, viewport.height - lineHeight)
 
     const x = viewport.width / 2
     const y = lineHeight

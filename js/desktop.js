@@ -157,8 +157,11 @@ function onKeyUp(event) {
 }
 
 function renderDesktopKeys(x, y, lineHeight) {
-    var i = 0
-
+    ctx.fillStyle = '#ccc'
+    ctx.textAlign = 'center'
+    ctx.fillText('Project: '+currentProject, x, lineHeight)
+    
+    var i = 1
     const drawKeyInfo = (label, _shift, _control, _alt, _f) => {
         const { shift, control, alt, f } = commandKeys
         const enabled = shift == _shift && control == _control && alt == _alt && _f == f
