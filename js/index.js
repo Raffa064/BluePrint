@@ -36,12 +36,8 @@ updateCanvas()
 
 function handleMenuOption(option) {
     const options = {
-        'create-new': function() {
+        'project': function() {
             // TODO: create project dialog
-        },
-        'load': function() {
-            // TODO: load/manage project dialog
-
         },
         'export': function() {
             save()
@@ -113,68 +109,25 @@ function setupInputEvents() {
         searchContainer.classList.add('mobile')
         searchToggler.onclick = toggleSearch
 
-        window.addEventListener('touchstart', onTouchDown)
-        window.addEventListener('touchmove', onTouchMove)
-        window.addEventListener('touchend', onTouchUp)
+        container.addEventListener('touchstart', onTouchDown)
+        container.addEventListener('touchmove', onTouchMove)
+        container.addEventListener('touchend', onTouchUp)
         return
     }
 
-    window.addEventListener('mousedown', onMouseDown)
-    window.addEventListener('mousemove', onMouseMove)
-    window.addEventListener('mouseup', onMouseUp)
-    window.addEventListener('keydown', onKeyDown)
-    window.addEventListener('keyup', onKeyUp)
-}
-
-function save() {
-    const data = {
-        globalId: state.globalId,
-        blocks: [],
-        connections: []
-    }
-
-    state.blocks.forEach((block) => {
-        const blockData = {
-            id: block.id,
-            x: block.offsetLeft,
-            y: block.offsetTop,
-            content: block.innerHTML
-        }
-        data.blocks.push(blockData)
-        block.connections.forEach((other) => {
-            data.connections.push([block.id, other.id])
-        })
-    })
-
-    window.localStorage.data = JSON.stringify(data)
-}
-
-function load() {
-    const data = window.localStorage.data
-
-    if (data) {
-        const json = JSON.parse(data)
-
-        state.globalId = json.globalId
-        const loadedBlocks = {}
-        json.blocks.forEach((blockData) => {
-            const { id, x, y, content } = blockData
-            const block = createBlock(x, y, id)
-            block.innerHTML = content
-            loadedBlocks[id] = block
-        })
-        json.connections.forEach((connection) => {
-            const [from, to] = connection
-            loadedBlocks[from].connections.push(loadedBlocks[to])
-        })
-    }
+    container.addEventListener('mousedown', onMouseDown)
+    container.addEventListener('mousemove', onMouseMove)
+    container.addEventListener('mouseup', onMouseUp)
+    container.addEventListener('keydown', onKeyDown)
+    container.addEventListener('keyup', onKeyUp)
 }
 
 function setupSaveLoadFeatures() {
-    load()
-    setInterval(() => {
-        save()
-    }, 2000)
+    const current = localStorage.currentProject || 'new-project'
+    if (!loadProject(current)) {
+        createProject(current)
+        loadProject(current)
+    }
 }
 
 function setupCanvas() {
@@ -357,6 +310,10 @@ function renderHUD(fontSize) {
     ctx.textAlign = 'right'
     ctx.fillText('Blocks: ' + container.children.length, viewport.width - lineHeight, lineHeight)
 
+    ctx.fillStyle = '#aaa'
+    ctx.textAlign = 'left'
+    ctx.fillText(currentProject, lineHeight, viewport.height - lineHeight)
+    
     const x = viewport.width / 2
     const y = lineHeight
 

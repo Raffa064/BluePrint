@@ -1,0 +1,103 @@
+#manager {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background: #1115;
+}
+
+#manager * {
+    user-select: none;
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+
+#manager .modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    padding: 10px;
+    width: 100vw;
+    height: 100vh;
+    min-width: 300px;
+    min-height: 250px;
+    max-width: min(90vw, 600px);
+    max-height: min(80vh, 400px);
+    background: #aaa2;
+    backdrop-filter: blur(5px);
+    border-radius: 4px;
+    box-shadow: 0px 0px 5px #0003;
+}
+
+#manager #search-bar {
+    width: 100%;
+    height: 2rem;
+    padding-inline: 10px;
+    background: transparent;
+    color: #aaa;
+    border-radius: 4px;
+    border: 1px solid #aaa7;
+}
+
+#manager #search-bar:focus {
+    border: 1px solid #aaa;
+}
+
+#manager #project-list {
+    flex: 1;
+    list-style: none;
+    overflow-y: scroll;
+    padding: 10px;
+    margin-top: 10px;
+    background: #0005;
+    border-radius: 4px;
+}
+
+#manager .project-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 4px;
+    border: 1px solid #aaa3;
+}
+
+#manager .project-name {
+    flex: 1;
+    padding: 5px;
+    margin-right: 10px;
+    color: #aaa;
+    border-radius: 4px;
+    border: 1px solid #aaa4;
+}
+
+#manager .project-name:hover {
+    border: 1px solid #aaa7;
+}
+
+#manager .project-option + .project-option {
+    margin-left: 10px;
+}
+
+#manager .project-option {
+    width: 8ch;
+    height: 1.9rem;
+    background: transparent;
+    color: #aaa;
+    border-radius: 4px;
+    border: 1px solid #aaa2;
+}
+
+#manager .project-option:hover {
+    background: #aaa1;
+}
+
+#manager .project-option:active {
+    background: #aaa2;
+}

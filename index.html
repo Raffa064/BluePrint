@@ -3,18 +3,19 @@
 
 <head>
     <title>BluePrint</title>
-    
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <meta http-equiv='cache-control' content='no-cache'>
     <meta http-equiv='expires' content='0'>
     <meta http-equiv='pragma' content='no-cache'>
-    
-    <link rel="stylesheet" href="css/index.css"/>
-    <link rel="stylesheet" href="css/index-block.css"/>
-    <link rel="stylesheet" href="css/index-search-container.css"/>
-    <link rel="stylesheet" href="css/index-menu.css"/>
-    
+
+    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="css/index-block.css" />
+    <link rel="stylesheet" href="css/index-search-container.css" />
+    <link rel="stylesheet" href="css/index-menu.css" />
+    <link rel="stylesheet" href="css/index-manager.css" />
+
     <script src="https://cdn.jsdelivr.net/npm/ismobilejs@1/dist/isMobile.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
@@ -22,28 +23,89 @@
 
 <body>
     <canvas id="canvas"></canvas>
-    
+
     <div id="container"></div>
-    
+
     <div class="hidden" id="search-container">
         <span id='search-toggler'><ion-icon name="search-outline"></ion-icon></span>
-        <input id="search-input" type="text" autocomplete="off" placeholder="Search"/> <button id="search-next-button">Next (0/0)</button>
+        <input id="search-input" type="text" autocomplete="off" placeholder="Search" /> <button id="search-next-button">Next (0/0)</button>
     </div>
-    
+
     <div id="menu-container">
         <span id="open-icon"><ion-icon name="menu-outline"></ion-icon></span>
-        <span id="close-icon"><ion-icon name="close-outline">Close</ion-icon></span>
+        <span id="close-icon"><ion-icon name="close-outline"></ion-icon></span>
         <ul>
-            <li><button id="create-new" onClick="handleMenuOption(id)">New</button></li>
-            <li><button id="load" onClick="handleMenuOption(id)">Load</button></li>
+            <li><button id="project" onClick="handleMenuOption(id)">Project...</button></li>
             <li><button id="export" onClick="handleMenuOption(id)">Export json</button></li>
             <li><button id="import" onClick="handleMenuOption(id)">Import json</button></li>
         </ul>
     </div>
-    
-    <script src="desktop.js"></script>
-    <script src="mobile.js"></script>
-    <script src="index.js"></script>
+
+    <div id="manager">
+        <div class="modal">
+            <input id="search-bar" placeholder="Search..." />
+            <ul id="project-list">
+                <li class="project-item">
+                    <p class="project-name" contenteditable="true">Project</p>
+                    <button class="project-option">Delete</button>
+                    <button class="project-option">Open</button>
+                </li>
+                <li class="project-item">
+                    <p class="project-name">Project</p>
+                    <button class="project-option">Delete</button>
+                    <button class="project-option">Open</button>
+                </li>
+                <li class="project-item">
+                    <p class="project-name">Project</p>
+                    <button class="project-option">Delete</button>
+                    <button class="project-option">Open</button>
+                </li>
+                <li class="project-item">
+                    <p class="project-name">Project</p>
+                    <button class="project-option">Delete</button>
+                    <button class="project-option">Open</button>
+                </li>
+                <li class="project-item">
+                    <p class="project-name">Project</p>
+                    <button class="project-option">Delete</button>
+                    <button class="project-option">Open</button>
+                </li>
+                <li class="project-item">
+                    <p class="project-name">Project</p>
+                    <button class="project-option">Delete</button>
+                    <button class="project-option">Open</button>
+                </li>
+                <li class="project-item">
+                    <p class="project-name">Project</p>
+                    <button class="project-option">Delete</button>
+                    <button class="project-option">Open</button>
+                </li>
+                <li class="project-item">
+                    <p class="project-name">Project</p>
+                    <button class="project-option">Delete</button>
+                    <button class="project-option">Open</button>
+                </li>
+                <li class="project-item">
+                    <p class="project-name">Project</p>
+                    <button class="project-option">Delete</button>
+                    <button class="project-option">Open</button>
+                </li>
+            </ul>
+            <!--
+                    Barra de pesquisa
+                    Lista de projetos:
+                        rename
+                        delete
+                        open
+                    -->
+        </div>
+    </div>
+
+    <script src="js/desktop.js"></script>
+    <script src="js/mobile.js"></script>
+    <script src="js/save-load.js"></script>
+    <script src="js/index.js"></script>
+    <script src="js/debug.js"></script>
 </body>
 
 </html>
