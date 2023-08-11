@@ -37,7 +37,7 @@ checkMobileDevice()
 setupInputEvents()
 setupSaveLoadFeatures()
 setupProjectManager()
-setupCanvas(viewport, canvasQuality)
+setupCanvas()
 updateCanvas()
 
 function resetState() {
@@ -158,21 +158,21 @@ function searchProject(query) {
         projectName.classList.add('project-name')
         projectName.innerText = project.name
         projectName.contentEditable = 'true'
-        projectName.addEventListener('input', () => {
+        projectName.oninput = () => {
             if (renameProject(project, projectName.innerText)) {
                 projectName.classList.remove('error')
                 return
             }
 
             projectName.classList.add('error')
-        })
+        }
         projectItem.appendChild(projectName)
 
         const projectDelete = document.createElement('button')
         projectDelete.classList.add('project-option')
         projectDelete.innerText = 'Delete'
         var clickCount = 0
-        projectDelete.addEventListener('click', () => {
+        projectDelete.onclick = () => {
             clickCount++
             projectDelete.innerText = 'Twice!'
 
@@ -185,7 +185,7 @@ function searchProject(query) {
 
                 projectDelete.innerText = 'Delete'
             }, 180)
-        })
+        }
 
         if (project.name != currentProject) {
             projectItem.appendChild(projectDelete)
@@ -194,10 +194,10 @@ function searchProject(query) {
         const projectOpen = document.createElement('button')
         projectOpen.classList.add('project-option')
         projectItem.appendChild(projectOpen)
-        projectOpen.addEventListener('click', () => {
+        projectOpen.onclick = () => {
             loadProject(project.name)
             toggleManager()
-        })
+        }
         projectOpen.innerText = 'Open'
     })
 }
@@ -216,22 +216,22 @@ function generateHash(size) {
 }
 
 function setupProjectManager() {
-    manager.addEventListener('click', (event) => {
+    manager.onclick = (event) => {
         if (event.target == manager) {
             event.preventDefault()
             toggleManager()
         }
-    })
+    }
 
-    managerSearchBar.addEventListener('input', () => {
+    managerSearchBar.oninput = () => {
         searchProject(managerSearchBar.value)
     })
     
-    managerProjectCreate.addEventListener('click', () => {
+    managerProjectCreate.onclick = () => {
         const newProjectName = 'New-Project-'+generateHash(10)
         createProject(newProjectName)
         searchProject(newProjectName)
-    })
+    }
 }
 
 function setupCanvas() {
