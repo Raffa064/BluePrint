@@ -9,7 +9,8 @@ function loadProjectList() {
 
     const hasStoredData = localStorage['project-list'] !== undefined
     if (hasStoredData) {
-        list = JSON.parse(localStorage['project-list'])
+        const decompressedJson = decompress(localStorage['project-list'])
+        list = JSON.parse(decompressedJson)
     }
 
     list.getProject = (projectName) => {
@@ -131,5 +132,5 @@ function save() {
     }
     
     localStorage.currentProject = currentProject
-    localStorage['project-list'] = JSON.stringify(projectList)
+    localStorage['project-list'] = compress(JSON.stringify(projectList))
 }
