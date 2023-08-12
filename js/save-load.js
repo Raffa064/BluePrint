@@ -1,35 +1,35 @@
-// lista de projetos
-const projectList = loadProjectList()
 const SAVE_DELAY = 1000
+const projectList = loadProjectList()
 
 var saveInterval
 var currentProject
 
 function loadProjectList() {
-    var list
+    var list = []
 
-    if (localStorage['project-list']) {
+    const hasStoredData = localStorage['project-list'] !== undefined
+    if (hasStoredData) {
         list = JSON.parse(localStorage['project-list'])
-    } else {
-        list = []
     }
 
-    list.getProject = function(projectName) {
-        return this.find(p => p.name === projectName)
+    list.getProject = (projectName) => {
+        return list.find(project => {
+            return project.name === projectName
+        })
     }
 
     return list
 }
 
 function createProject(projectName) {
-    const project = {
+    const projectData = {
         name: projectName.trim(),
         globalId: 0,
         blocks: [],
         connections: []
     }
 
-    projectList.push(project)
+    projectList.push(projectData)
 
     return project
 }
@@ -40,11 +40,12 @@ function isValidProjectName(name) {
 
 function renameProject(project, newName) {
     if (project.name == newName) return
-    
-    if (projectList.getProject(newName) == null && isValidProjectName(newName)) {
-        if (currentProject === project.name) {
+
+    const alreadyExists = projectList.getProject(newName) != null
+
+    if (!alreadyExists && isValidProjectName(newName)) {
+        if (currentProject === project.name) { // Rename openned project
             currentProject = newName
-            localStorage.currentProject = currentProject
             updateCanvas()
         }
 
@@ -60,14 +61,13 @@ function loadProject(projectName) {
 
     if (!project) return false
 
-    if (saveInterval) {
+    if (saveInterval) { // Stop save interval
         save()
         clearInterval(saveInterval)
         saveInterval = null
     }
 
     currentProject = projectName
-    localStorage.currentProject = currentProject
     resetState()
     loadState()
     updateCanvas()
@@ -82,24 +82,27 @@ function loadState() {
 
     if (project) {
         state.globalId = project.globalId
+        
         const loadedBlocks = {}
         project.blocks.forEach((blockData) => {
             const { id, x, y, content } = blockData
             const block = createBlock(x, y, id)
             block.setContent(content)
+            
             loadedBlocks[id] = block
         })
+        
         project.connections.forEach((connection) => {
             const [from, to] = connection
             loadedBlocks[from].connections.push(loadedBlocks[to])
         })
     } else {
-        console.log('ERROR: load() for a null project "' + currentProject + '"')
+        console.log('ERROR on loadState(): Project "' + currentProject + '" not exists ')
     }
 }
 
 function save() {
-    const data = {
+    const projectData = {
         name: currentProject,
         globalId: state.globalId,
         blocks: [],
@@ -113,16 +116,20 @@ function save() {
             y: block.offsetTop,
             content: block.getContent()
         }
-        data.blocks.push(blockData)
+        
+        projectData.blocks.push(blockData)
+        
         block.connections.forEach((other) => {
-            data.connections.push([block.id, other.id])
+            projectData.connections.push([block.id, other.id])
         })
     })
 
-    const project = projectList.getProject(currentProject)
-    projectList.splice(projectList.indexOf(project), 1, data)
-
+    if (DEBUG_MODE) {
+        const project = projectList.getProject(currentProject)
+        projectList.splice(projectList.indexOf(project), 1, projectData)
+        localStorage.saveCount = parseInt(localStorage.saveCount || 0) + 1
+    }
+    
+    localStorage.currentProject = currentProject
     localStorage['project-list'] = JSON.stringify(projectList)
-
-    localStorage.saveCount = parseInt(localStorage.saveCount || 0) + 1
 }

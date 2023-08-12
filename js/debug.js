@@ -1,4 +1,6 @@
-if (location.host.startsWith('localhost')) {
+const DEBUG_MODE = location.host.startsWith('localhost')
+
+if (DEBUG_MODE) {
     console.log('DEBUG ENABLED')
     
     function testProjectNames() {
