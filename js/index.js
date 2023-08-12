@@ -233,7 +233,7 @@ function setupProjectManager() {
     }
     
     managerProjectCreate.onclick = () => {
-        const newProjectName = 'New-Project-'+generateHash(10)
+        const newProjectName = 'NewProject_'+generateHash(10)
         createProject(newProjectName)
         searchProject(newProjectName)
     }
