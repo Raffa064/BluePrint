@@ -60,7 +60,7 @@ function handleMenuOption(option) {
             const downloadUrl = URL.createObjectURL(blob)
             const link = document.createElement('a')
             link.href = downloadUrl
-            link.download = 'BluePrint-'+currentProject+'-' + floor(Date.now() / 1000) + '.json'
+            link.download = 'BluePrint-' + currentProject + '-' + floor(Date.now() / 1000) + '.json'
             link.click()
             URL.revokeObjectURL(blob)
         },
@@ -73,7 +73,7 @@ function handleMenuOption(option) {
                 reader.onload = (e) => {
                     const projectData = JSON.parse(e.target.result)
                     while (projectList.getProject(projectData.name)) {
-                        projectData.name += '_imported_'+floor(Date.now()/1000)
+                        projectData.name += '_imported_' + floor(Date.now() / 1000)
                     }
                     projectList.push(projectData)
                     resetState()
@@ -216,7 +216,7 @@ function generateHash(size) {
     for (let i = 0; i < size; i++) {
         hash += floor(random() * 16).toString(16)
     }
-    
+
     return hash
 }
 
@@ -231,11 +231,19 @@ function setupProjectManager() {
     managerSearchBar.oninput = () => {
         searchProject(managerSearchBar.value)
     }
-    
+
     managerProjectCreate.onclick = () => {
-        const newProjectName = 'NewProject_'+generateHash(10)
+        const newProjectName = 'NewProject_' + generateHash(10)
         createProject(newProjectName)
         searchProject(newProjectName)
+        
+        const projectName = managerProjectList.querySelector('.project-item .project-name')
+        projectName.focus()
+        
+        const range = document.createRange()
+        range.selectNodeContents(projectName)
+        getSelection().removeAllRanges()
+        getSelection().addRange(range)
     }
 }
 
@@ -297,9 +305,9 @@ function createBlock(x = 0, y = 0, id) {
     block.id = id
     block.className = 'block'
     block.innerHTML = '<span class="content" contenteditable="true">Block</span>'
-    
+
     const content = block.querySelector('.content')
-        
+
     block.style.left = snapToGrid(x) + 'px'
     block.style.top = snapToGrid(y) + 'px'
     block.connections = []
