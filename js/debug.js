@@ -3,6 +3,8 @@ const DEBUG_MODE = location.host.startsWith('localhost')
 if (DEBUG_MODE) {
     console.log('DEBUG ENABLED')
     
+    logData()
+    
     function testProjectNames() {
         const names = [
             ['Project', true],
@@ -57,23 +59,31 @@ if (DEBUG_MODE) {
     }
     
     function logData() {
-        const blockCount = container.children.length
-        var connectionCount = 0
+        const project = projectList.getProject(currentProject)
+        const blockCount = project.blocks.length
+        const connectionCount = project.connections.length
         const projectCount = projectList.length
+        var totalBlockCount = projectList.reduce((acc, prj) => acc + prj.blocks.length, 0)
+        var totalConnectionCount = projectList.reduce((acc, prj) => acc + prj.connections.length, 0)
         const totalStorage = (localStorage.saveCount + localStorage.currentProject + localStorage['project-list']).length
+        const jsonLength = JSON.stringify(projectList).length
+        const compressedJsonLength = localStorage['project-list'].length
+        const compressPercentage = (100-(compressedJsonLength / (jsonLength/100))).toFixed(2)
+        const savedStorage = jsonLength - compressedJsonLength
         const { saveCount } = localStorage
         const avgTime = ((saveCount * SAVE_DELAY) / 1000) / 60
         
-        document.querySelectorAll('.block').forEach((block) => {
-            connectionCount += block.connections.length
-        })
-        
         console.log(
             'Current project: ' + currentProject + '\n' +
-            'Block count: ' + blockCount + '\n' +
-            'Connection count: ' + connectionCount + '\n' +
+            '  Project block count: ' + blockCount + '\n' +
+            '  Project connection count: ' + connectionCount + '\n' +
             'Project count: ' + projectCount + '\n' +
+            '  Total project block count: ' + totalBlockCount + '\n' +
+            '  Total project connection count: ' + totalConnectionCount + '\n' +
             'Total stored data: ' + totalStorage + ' bytes' + '\n' +
+            'Json length: ' + jsonLength + ' bytes' + '\n' +
+            'Compressed json length: ' + compressedJsonLength + ' bytes ('+compressPercentage+'%)' + '\n' +
+            'Saved storage (by LZ77): ' + savedStorage + ' bytes' + '\n' +
             'Save count: ' + (saveCount || 0) + '\n' +
             'Average time: ' + avgTime.toFixed(2) + ' minutes'
         )
