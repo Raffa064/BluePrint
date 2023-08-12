@@ -1,6 +1,5 @@
 const { floor, PI, sqrt, min, max, random } = Math
 
-
 const rootTheme = document.querySelector(':root')
 const canvas = document.querySelector('#canvas')
 const ctx = canvas.getContext('2d')
@@ -355,87 +354,6 @@ function translateTo(x, y) {
     transform.y = y
     rootTheme.style.setProperty('--translate-x', transform.x + 'px')
     rootTheme.style.setProperty('--translate-y', transform.y + 'px')
-}
-
-function renderDot(x, y, radius, color) {
-    ctx.beginPath()
-    ctx.arc(x, y, radius, 0, 2 * PI)
-    ctx.fillStyle = color
-    ctx.fill()
-}
-
-function renderConnection(from, to, fake) {
-    const canvasRect = canvas.getBoundingClientRect()
-
-    const x1 = from.offsetLeft + from.offsetWidth / 2
-    const y1 = from.offsetTop + from.offsetHeight / 2
-    const x2 = to.offsetLeft + to.offsetWidth / 2
-    const y2 = to.offsetTop + to.offsetHeight / 2
-
-    const dx = x2 - x1;
-    const dy = y2 - y1;
-    const dst = sqrt(dx ** 2 + dy ** 2)
-
-    var fromX, fromY
-
-    fromX = x1 + (dx * from.offsetWidth / dst)
-    fromY = y1 + (dy * from.offsetHeight / dst)
-    fromX = max(from.offsetLeft, min(from.offsetLeft + from.offsetWidth, fromX))
-    fromY = max(from.offsetTop, min(from.offsetTop + from.offsetHeight, fromY))
-
-    toX = x2 - (dx * to.offsetWidth / dst)
-    toY = y2 - (dy * to.offsetHeight / dst)
-    toX = max(to.offsetLeft, min(to.offsetLeft + to.offsetWidth, toX))
-    toY = max(to.offsetTop, min(to.offsetTop + to.offsetHeight, toY))
-
-    ctx.beginPath()
-    ctx.moveTo(transform.x + fromX, transform.y + fromY)
-    ctx.lineTo(transform.x + toX, transform.y + toY)
-    ctx.strokeStyle = fake ? '#aaa3' : '#aaa6'
-    ctx.lineWidth = 4
-    ctx.stroke()
-
-    renderDot(transform.x + fromX, transform.y + fromY, 8, fake ? '#08fa' : '#08f')
-    renderDot(transform.x + toX, transform.y + toY, 5, fake ? '#f80a' : '#f80')
-}
-
-function renderBackground() {
-    ctx.fillStyle = '#222'
-    ctx.fillRect(0, 0, viewport.width, viewport.height)
-}
-
-function renderGuide() {
-    ctx.strokeStyle = '#333'
-    ctx.lineWidth = 3
-    ctx.rect(transform.x, transform.y, viewport.width - 1.5, viewport.height - 1.5)
-    ctx.stroke()
-
-    const displacement = (x) => x / grid - floor(x / grid)
-    for (let x = displacement(transform.x); x < viewport.width / grid; x++) {
-        for (let y = displacement(transform.y); y < viewport.height / grid; y++) {
-            renderDot(x * grid, y * grid, 1, x % 2 == y % 2 ? '#666' : '#555')
-        }
-    }
-}
-
-function renderHUD(fontSize) {
-    const lineHeight = fontSize * 1.2
-    ctx.font = fontSize + 'px Helvetica'
-
-    ctx.fillStyle = '#aaa'
-    ctx.textAlign = 'left'
-    ctx.fillText('[ ' + (-transform.x + viewport.width / 2).toFixed(2) + ', ' + (transform.y + viewport.height / 2).toFixed(2) + ' ]', lineHeight, lineHeight)
-    ctx.textAlign = 'right'
-    ctx.fillText('Blocks: ' + container.children.length, viewport.width - lineHeight, lineHeight)
-
-    const x = viewport.width / 2
-    const y = lineHeight
-
-    if (isMobile.any) {
-        renderMobileGestures(x, y, lineHeight)
-    } else {
-        renderDesktopKeys(x, y, lineHeight)
-    }
 }
 
 function updateCanvas() {

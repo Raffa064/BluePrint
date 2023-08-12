@@ -134,22 +134,3 @@ function onTouchUp(event) {
         }
     }
 }
-
-function renderMobileGestures(x, y, lineHeight) {
-    ctx.fillStyle = '#aaa'
-    ctx.textAlign = 'center'
-    ctx.fillText(currentProject, x, lineHeight)
-    
-    const labels = [
-        'Move : Drag',
-        'Create : Double click',
-        'Connect : Hold + drag to',
-        'Delete : Hold',
-    ]
-
-    for (let i = 0; i < labels.length; i++) {
-        ctx.fillStyle = '#777'
-        ctx.textAlign = 'center'
-        ctx.fillText(labels[i], x, y + ((i + 1) * lineHeight))
-    }
-}
