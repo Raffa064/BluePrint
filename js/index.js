@@ -183,13 +183,13 @@ function searchProject(query) {
 
             setTimeout(() => {
                 if (clickCount > 2) {
-                    projectList.splice(project, 1)
-                    searchProject(query)
+                    deleteProject(project)
+                    searchProject(managerSearchBar.value)
                     return
                 }
 
                 projectDelete.innerText = 'Delete'
-            }, 180)
+            }, 200)
         }
 
         if (project.name != currentProject) {

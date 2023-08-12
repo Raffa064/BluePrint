@@ -22,6 +22,10 @@ function loadProjectList() {
     return list
 }
 
+function isValidProjectName(name) {
+    return name.match(/^[A-z_]{1,}[A-z_0-9]*$/)
+}
+
 function createProject(projectName) {
     const projectData = {
         name: projectName.trim(),
@@ -33,10 +37,6 @@ function createProject(projectName) {
     projectList.push(projectData)
 
     return project
-}
-
-function isValidProjectName(name) {
-    return name.match(/^[A-z_]{1,}[A-z_0-9]*$/)
 }
 
 function renameProject(project, newName) {
@@ -55,6 +55,13 @@ function renameProject(project, newName) {
     }
 
     return false
+}
+
+function deleteProject(project) {
+    const index = projectList.indexOf(project)
+    if (index >= 0) {
+        projectList.splice(index, 1)
+    }
 }
 
 function loadProject(projectName) {
@@ -83,16 +90,16 @@ function loadState() {
 
     if (project) {
         state.globalId = project.globalId
-        
+
         const loadedBlocks = {}
         project.blocks.forEach((blockData) => {
             const { id, x, y, content } = blockData
             const block = createBlock(x, y, id)
             block.setContent(content)
-            
+
             loadedBlocks[id] = block
         })
-        
+
         project.connections.forEach((connection) => {
             const [from, to] = connection
             loadedBlocks[from].connections.push(loadedBlocks[to])
@@ -117,9 +124,9 @@ function save() {
             y: block.offsetTop,
             content: block.getContent()
         }
-        
+
         projectData.blocks.push(blockData)
-        
+
         block.connections.forEach((other) => {
             projectData.connections.push([block.id, other.id])
         })
@@ -130,7 +137,7 @@ function save() {
         projectList.splice(projectList.indexOf(project), 1, projectData)
         localStorage.saveCount = parseInt(localStorage.saveCount || 0) + 1
     }
-    
+
     localStorage.currentProject = currentProject
     localStorage['project-list'] = compress(JSON.stringify(projectList))
 }
