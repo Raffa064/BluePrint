@@ -183,8 +183,16 @@ function searchProject(query) {
 
             setTimeout(() => {
                 if (clickCount > 2) {
-                    deleteProject(project)
-                    searchProject(managerSearchBar.value)
+                    projectItem.style.maxHeight = '0px'
+                    projectItem.style.padding = '0px'
+                    projectItem.style.marginBottom = '0px'
+                    projectItem.style.border = '0px solid transparent'
+                    projectItem.style.opacity = '0'
+                    
+                    setTimeout(() => {
+                        deleteProject(project)
+                        projectItem.remove()
+                    }, 1000)
                     return
                 }
 
@@ -236,10 +244,10 @@ function setupProjectManager() {
         const newProjectName = 'NewProject_' + generateHash(10)
         createProject(newProjectName)
         searchProject(newProjectName)
-        
+
         const projectName = managerProjectList.querySelector('.project-item .project-name')
         projectName.focus()
-        
+
         const range = document.createRange()
         range.selectNodeContents(projectName)
         getSelection().removeAllRanges()

@@ -71,6 +71,10 @@
     margin-bottom: 10px;
     border-radius: 4px;
     border: 1px solid #aaa3;
+    transition: .3s ease;
+    overflow: hidden;
+    max-height: 5rem;
+    opacity: 1;
 }
 
 #manager .project-name {
@@ -80,6 +84,7 @@
     color: #aaa;
     border-radius: 4px;
     border: 1px solid #aaa4;
+    transition: .2s;
 }
 
 #manager .project-name:hover {
