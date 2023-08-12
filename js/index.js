@@ -277,7 +277,7 @@ function goToNextBlock() {
     searchIndex = (searchIndex + 1) % searchResults.length
     nextButton.textContent = 'Next (' + searchIndex + '/' + searchResults.length + ')'
     if (block) {
-        const rect = getBlockRect(block)
+        const rect = block.getBoundingClientRect()
 
         translateTo(
             transform.x - rect.x - rect.width / 2 + viewport.width / 2,
@@ -325,14 +325,10 @@ function deleteBlock(block) {
     })
 }
 
-function getBlockRect(block) {
-    return block.getBoundingClientRect();
-}
-
 function findBlock(x, y) {
     for (let i = state.blocks.length - 1; i >= 0; i--) {
         const block = state.blocks[i]
-        const rect = getBlockRect(block)
+        const rect = block.getBoundingClientRect()
         if (x > rect.x && x < rect.x + rect.width && y > rect.y && y < rect.y + rect.height) {
             return block
         }
@@ -369,7 +365,7 @@ function updateCanvas() {
 
     if (isMobile.any && selectedBlock && targetBlock) {
         if (targetBlock == selectedBlock) {
-            const rect = getBlockRect(targetBlock)
+            const rect = targetBlock.getBoundingClientRect()
             ctx.fillStyle = '#ed7'
             ctx.textAlign = 'center'
             ctx.fontSize = '20px'

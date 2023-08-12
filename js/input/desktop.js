@@ -30,7 +30,7 @@ function onMouseDown(event) {
         isDragging = true
         isBlockDragging = true
 
-        const rect = getBlockRect(clickedBlock)
+        const rect = clickedBlock.getBoundingClientRect()
         dragOffset.x = transform.x + event.x - rect.x
         dragOffset.y = transform.y + event.y - rect.y
 

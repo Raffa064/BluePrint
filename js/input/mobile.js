@@ -51,7 +51,7 @@ function onTouchMove(event) {
             isBlockDragging = true
             updateCanvas()
 
-            const rect = getBlockRect(holdingBlock)
+            const rect = holdingBlock.getBoundingClientRect()
             dragOffset.x = transform.x + event.touches[0].clientX - rect.x
             dragOffset.y = transform.y + event.touches[0].clientY - rect.y
         }
