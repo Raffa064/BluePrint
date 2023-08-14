@@ -1,16 +1,17 @@
-const DOUBLE_CLICK_DURATION = 180
-const HOLD_DURATION = 200
+const DOUBLE_CLICK_DURATION = 200
+const HOLD_DURATION = 300
 
 var waitingForDoubleClick = false
 var holdTimeoutId
-var holdingBlock // before selection
+var holdingBlock
 var targetBlock
 
 function onTouchDown(event) {
-    if (event.touches.length > 1) return
+    if (event.touches.length > 1) {
+        return
+    }
 
-    if (waitingForDoubleClick) {
-        //Double click
+    if (waitingForDoubleClick) { // Double click
         waitingForDoubleClick = false
         createBlock(event.touches[0].clientX - transform.x, event.touches[0].clientY - transform.y, state.globalId++)
         return
@@ -22,22 +23,25 @@ function onTouchDown(event) {
     }, DOUBLE_CLICK_DURATION)
 
     holdingBlock = findBlock(event.touches[0].clientX, event.touches[0].clientY)
-    holdTimeoutId = setTimeout(() => {
-        if (holdingBlock) {
+
+    if (holdingBlock) {
+        holdTimeoutId = setTimeout(() => { //Hold selection (This timeout can be canceled by touching up or touch dragging)
             select(holdingBlock)
             targetBlock = holdingBlock
             updateCanvas()
-        }
-    }, DOUBLE_CLICK_DURATION)
+        }, HOLD_DURATION)
+    }
 }
 
 function onTouchMove(event) {
-    if (event.touches.length > 1) return
+    if (event.touches.length > 1) {
+        return
+    }
 
     clearTimeout(holdTimeoutId)
 
     if (!isDragging) {
-        if (!selectedBlock && !holdingBlock) {
+        if (!selectedBlock && !holdingBlock) { // Move camera mode
             isDragging = true
             isBlockDragging = false
             updateCanvas()
@@ -46,7 +50,7 @@ function onTouchMove(event) {
             dragOffset.y = event.touches[0].clientY
         }
 
-        if (!selectedBlock && holdingBlock) {
+        if (!selectedBlock && holdingBlock) { // Move block mode
             isDragging = true
             isBlockDragging = true
             updateCanvas()
@@ -58,19 +62,20 @@ function onTouchMove(event) {
 
     }
 
-    if (selectedBlock) {
+    if (selectedBlock) { // Change target (used for "fake connections")
         targetBlock = findBlock(event.touches[0].clientX, event.touches[0].clientY)
         updateCanvas()
     }
 
     if (isDragging) {
-        if (isBlockDragging) {
+        if (isBlockDragging) { // Move block
             holdingBlock.style.left = snapToGrid(event.touches[0].clientX - dragOffset.x) + 'px'
             holdingBlock.style.top = snapToGrid(event.touches[0].clientY - dragOffset.y) + 'px'
             updateCanvas()
             return
         }
 
+        //Move camera
         transform.x += (event.touches[0].clientX - dragOffset.x)
         transform.y += (event.touches[0].clientY - dragOffset.y)
 
@@ -78,56 +83,58 @@ function onTouchMove(event) {
 
         dragOffset.x = event.touches[0].clientX
         dragOffset.y = event.touches[0].clientY
+
         updateCanvas()
     }
 }
 
 function onTouchUp(event) {
-    if (event.changedTouches.length > 1) return
+    if (event.changedTouches.length > 1) {
+        return
+    }
 
     isDragging = false
+    isBlockDragging = false
     targetBlock = null
     updateCanvas()
 
     if (holdingBlock) {
         holdingBlock = null
 
-        if (isBlockDragging) {
-            isBlockDragging = false
-        }
+        const releasedBlock = findBlock(event.changedTouches[0].clientX, event.changedTouches[0].clientY)
 
-        const endBlock = findBlock(event.changedTouches[0].clientX, event.changedTouches[0].clientY)
-
-        if (selectedBlock && !endBlock) {
+        if (selectedBlock && !releasedBlock) { // Nothing (release on void)
             unselect()
             return
         }
 
-        if (selectedBlock && endBlock) {
-            if (selectedBlock == endBlock) {
+        if (selectedBlock && releasedBlock) {
+            if (selectedBlock == releasedBlock) { // Delete (Release at same block)
                 unselect()
-                deleteBlock(endBlock)
+                deleteBlock(releasedBlock)
                 updateCanvas()
                 return
             }
 
-            if (selectedBlock.connections.includes(endBlock)) { // Remove
-                selectedBlock.connections.splice(selectedBlock.connections.indexOf(endBlock), 1)
-                unselect()
-                updateCanvas()
-                return
-            }
-
-            if (endBlock.connections.includes(selectedBlock)) { // Invert
-                endBlock.connections.splice(endBlock.connections.indexOf(selectedBlock), 1)
-                selectedBlock.connections.push(endBlock)
+            if (selectedBlock.connections.includes(releasedBlock)) { // Remove connection
+                const releasedIndex = selectedBlock.connections.indexOf(releasedBlock)
+                selectedBlock.connections.splice(releasedIndex, 1)
                 unselect()
                 updateCanvas()
                 return
             }
 
-            // Create
-            selectedBlock.connections.push(endBlock)
+            if (releasedBlock.connections.includes(selectedBlock)) { // Invert connnection
+                const selectedIndex = releasedBlock.connections.indexOf(selectedBlock)
+                releasedBlock.connections.splice(selectedIndex, 1)
+                selectedBlock.connections.push(releasedBlock)
+                unselect()
+                updateCanvas()
+                return
+            }
+
+            // Create connection
+            selectedBlock.connections.push(releasedBlock)
             unselect()
             updateCanvas()
             return
