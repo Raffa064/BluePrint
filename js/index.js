@@ -189,7 +189,7 @@ function searchProject(query) {
                     projectItem.style.marginBottom = '0px'
                     projectItem.style.border = '0px solid transparent'
                     projectItem.style.opacity = '0'
-                    
+
                     setTimeout(() => {
                         deleteProject(project)
                         projectItem.remove()
@@ -313,37 +313,45 @@ function createBlock(x = 0, y = 0, id) {
     const block = document.createElement('div')
     block.id = id
     block.className = 'block'
-    block.innerHTML = '<span class="content" contenteditable="true">Block</span>'
+    block.innerHTML = '<span class="content">Block</span>'
 
 
     block.style.left = snapToGrid(x) + 'px'
     block.style.top = snapToGrid(y) + 'px'
     block.connections = []
-    
+
     const content = block.querySelector('.content')
     var contentMarkup = content.innerText // Default content: "Block"
-    
-    content.onfocus = () => {
+
+    content.onclick = (event) => {
+        if (event.target.nodeName !== 'A') {
+            content.contentEditable = "true"
+            content.focus()
+        }
+    }
+
+    content.onfocus = (event) => {
         content.innerText = contentMarkup
         updateCanvas()
     }
-    
+
     content.oninput = () => {
         contentMarkup = content.innerText
         updateCanvas()
     }
-    
+
     content.onblur = () => {
+        content.contentEditable = "false"
         console.log(parseMarkup(contentMarkup))
         content.innerHTML = parseMarkup(contentMarkup)
         updateCanvas()
     }
-    
+
     block.setContent = (contentStr) => {
         contentMarkup = contentStr
         content.innerHTML = parseMarkup(contentMarkup)
     }
-    
+
     block.getContent = () => {
         return contentMarkup
     }
