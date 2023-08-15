@@ -1,1 +1,32 @@
-{"name":"BluePrint","globalId":14,"blocks":[{"id":"0","x":120,"y":120,"content":"index.js"},{"id":"1","x":300,"y":120,"content":"setup features and UI"},{"id":"2","x":480,"y":200,"content":"save-load.js"},{"id":"3","x":660,"y":200,"content":"Load and save data&nbsp;"},{"id":"5","x":480,"y":280,"content":"input/desktop.js"},{"id":"6","x":660,"y":280,"content":"Defines desktop input"},{"id":"7","x":480,"y":320,"content":"input/mobile.js"},{"id":"8","x":660,"y":320,"content":"Defines mobile input"},{"id":"9","x":480,"y":240,"content":"render-functions.js"},{"id":"10","x":660,"y":240,"content":"Contains all render functions"},{"id":"11","x":340,"y":260,"content":"Features"},{"id":"12","x":100,"y":220,"content":"compress.js"},{"id":"13","x":40,"y":320,"content":"only handles LZUTF8 compression"}],"connections":[["0","1"],["1","11"],["2","3"],["5","6"],["7","8"],["9","10"],["11","2"],["11","5"],["11","7"],["11","9"],["12","13"]]}
+{
+    "name": "BluePrint",
+    "globalId": 14,
+    "blocks": [
+        { "id": "0", "x": 120, "y": 120, "content": "index.js" },
+        { "id": "1", "x": 300, "y": 120, "content": "setup features and UI" },
+        { "id": "2", "x": 480, "y": 200, "content": "save-load.js" },
+        { "id": "3", "x": 660, "y": 200, "content": "Load and save data&nbsp;" },
+        { "id": "5", "x": 480, "y": 280, "content": "input/desktop.js" },
+        { "id": "6", "x": 660, "y": 280, "content": "Defines desktop input" },
+        { "id": "7", "x": 480, "y": 320, "content": "input/mobile.js" },
+        { "id": "8", "x": 660, "y": 320, "content": "Defines mobile input" },
+        { "id": "9", "x": 480, "y": 240, "content": "render-functions.js" },
+        { "id": "10", "x": 660, "y": 240, "content": "Contains all render functions" },
+        { "id": "11", "x": 340, "y": 260, "content": "Features" },
+        { "id": "12", "x": 100, "y": 220, "content": "lz-compression.js" },
+        { "id": "13", "x": 40, "y": 320, "content": "only handles LZUTF8 compression" }
+    ],
+    "connections": [
+        ["0", "1"],
+        ["1", "11"],
+        ["2", "3"],
+        ["5", "6"],
+        ["7", "8"],
+        ["9", "10"],
+        ["11", "2"], 
+        ["11", "5"], 
+        ["11", "7"], 
+        ["11", "9"], 
+        ["12", "13"]
+    ]
+} 

@@ -1,5 +1,6 @@
 const { floor, PI, sqrt, min, max, random } = Math
 
+const { parseMarkup } = Markup(20)
 const rootTheme = document.querySelector(':root')
 const canvas = document.querySelector('#canvas')
 const ctx = canvas.getContext('2d')
@@ -314,16 +315,37 @@ function createBlock(x = 0, y = 0, id) {
     block.className = 'block'
     block.innerHTML = '<span class="content" contenteditable="true">Block</span>'
 
-    const content = block.querySelector('.content')
 
     block.style.left = snapToGrid(x) + 'px'
     block.style.top = snapToGrid(y) + 'px'
     block.connections = []
-    block.setContent = (contentStr) => {
-        content.innerHTML = contentStr
+    
+    const content = block.querySelector('.content')
+    var contentMarkup = content.innerText // Default content: "Block"
+    
+    content.onfocus = () => {
+        content.innerText = contentMarkup
+        updateCanvas()
     }
+    
+    content.oninput = () => {
+        contentMarkup = content.innerText
+        updateCanvas()
+    }
+    
+    content.onblur = () => {
+        console.log(parseMarkup(contentMarkup))
+        content.innerHTML = parseMarkup(contentMarkup)
+        updateCanvas()
+    }
+    
+    block.setContent = (contentStr) => {
+        contentMarkup = contentStr
+        content.innerHTML = parseMarkup(contentMarkup)
+    }
+    
     block.getContent = () => {
-        return content.innerHTML
+        return contentMarkup
     }
 
     container.appendChild(block)

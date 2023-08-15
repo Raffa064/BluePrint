@@ -3,7 +3,7 @@ const DEBUG_MODE = location.host.startsWith('localhost')
 if (DEBUG_MODE) {
     console.log('DEBUG ENABLED')
     
-    logData()
+    //logData()
     
     function testProjectNames() {
         const names = [
